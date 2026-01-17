@@ -68,7 +68,10 @@
         #preloader {
             position: fixed; inset: 0; z-index: 10000;
             display: flex; flex-direction: column;
+            transition: opacity 0.5s ease;
         }
+        body.skip-loader #preloader { display: none !important; }
+
         .curtain-top, .curtain-bottom {
             width: 100%; height: 50%; background: #000;
             display: flex; align-items: flex-end; justify-content: center;
@@ -97,137 +100,146 @@
         
         /* --- DYNAMIC NAVBAR --- */
         .nav-pill-container {
-            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
-            z-index: 8000; 
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            z-index: 99999; 
             display: flex; justify-content: center;
-            opacity: 1;
-            width: fit-content;
-            max-width: 95vw;
+            opacity: 0;
+            width: auto; max-width: 95vw; 
         }
 
         .nav-pill {
             background: #111;
-            border: 2px solid rgba(255, 255, 255, 0.15); /* Thicker border for better visibility */
+            border: 2px solid rgba(255, 255, 255, 0.15);
             border-radius: 100px;
-            padding: 5px;
-            display: flex; align-items: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            height: 56px;
+            padding: 4px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            height: 64px; 
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
         }
 
-        /* Nav Color States */
         .nav-pill.blue-mode {
-            background: #0f172a; /* Dark Blue Slate */
-            border-color: #3b82f6; /* Bright Blue */
+            background: rgba(15, 23, 42, 0.95);
+            border-color: #3b82f6;
             box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
         }
-        
         .nav-pill.red-mode {
-            background: #0a0a0a;
-            border-color: #ef4444; /* Red */
+            background: rgba(10, 10, 10, 0.95);
+            border-color: #ef4444;
             box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
         }
 
         .nav-avatar {
-            width: 44px; height: 44px; border-radius: 50%; overflow: hidden;
+            width: 48px; height: 48px; border-radius: 50%; overflow: hidden;
             border: 2px solid rgba(255,255,255,0.2);
-            flex-shrink: 0; position: relative; z-index: 2; margin-right: 4px;
+            flex-shrink: 0; margin-right: 4px;
         }
         .nav-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
         .nav-links-wrapper {
             width: 0; opacity: 0; overflow: hidden;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex; align-items: center;
         }
         
         .nav-pill-container.expanded .nav-links-wrapper {
-            width: auto; opacity: 1; margin: 0 10px; padding-right: 10px;
+            width: auto; opacity: 1; margin: 0 2px; 
+            overflow: visible; 
         }
 
-        .nav-links { display: flex; gap: 2px; white-space: nowrap; }
+        .nav-links { display: flex; gap: 0px; white-space: nowrap; }
 
         .nav-link {
-            padding: 8px 18px; border-radius: 100px;
-            font-family: 'Teko', sans-serif; font-size: 1.1rem; letter-spacing: 1px;
-            color: #888; text-decoration: none; transition: 0.3s;
+            padding: 8px 10px; border-radius: 100px;
+            font-family: 'Teko', sans-serif; font-size: 1.1rem; letter-spacing: 0.5px;
+            color: #888; text-decoration: none; transition: 0.2s;
             text-transform: uppercase;
             touch-action: manipulation;
         }
-        .nav-link:hover { color: white; background: rgba(255,255,255,0.1); }
-        .nav-link.switch-btn { color: #ff5555; font-weight: 600; }
-        .nav-link.switch-btn:hover { background: rgba(255, 85, 85, 0.15); }
+        .nav-link:active, .nav-link:hover { color: white; background: rgba(255,255,255,0.15); }
+        .nav-link.switch-btn { color: #ff5555; font-weight: 600; cursor: pointer; }
         
-        /* Blue mode specific text colors */
         .nav-pill.blue-mode .nav-link { color: #94a3b8; }
-        .nav-pill.blue-mode .nav-link:hover { color: #fff; background: rgba(59, 130, 246, 0.2); }
+        .nav-pill.blue-mode .nav-link:active { color: #fff; background: rgba(59, 130, 246, 0.3); }
         .nav-pill.blue-mode .nav-link.switch-btn { color: #60a5fa; }
 
         .nav-cta {
             background: #ff0000; color: white; 
-            border-radius: 100px; height: 44px;
-            padding: 0 24px; display: flex; align-items: center;
-            font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.85rem;
-            text-transform: uppercase; transition: 0.3s; white-space: nowrap;
+            border-radius: 100px; height: 48px;
+            padding: 0 16px; display: flex; align-items: center;
+            font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.8rem;
+            text-transform: uppercase; transition: 0.2s; white-space: nowrap;
             flex-shrink: 0; border: none; cursor: pointer;
             touch-action: manipulation;
         }
-        .nav-cta:hover { background: #cc0000; transform: scale(1.02); }
-        
-        /* Blue CTA */
+        .nav-cta:active { transform: scale(0.95); }
         .nav-pill.blue-mode .nav-cta { background: #3b82f6; }
-        .nav-pill.blue-mode .nav-cta:hover { background: #2563eb; }
 
         /* CONTACT POPUP */
-        .contact-wrapper { position: relative; }
         .contact-popup {
-            position: absolute; bottom: 100%; right: 0;
-            width: 200px; padding-bottom: 20px;
-            opacity: 0; pointer-events: none; transition: 0.3s ease;
-            transform: translateY(10px); z-index: 10;
+            position: absolute; bottom: 110%; right: 0;
+            width: 220px; padding-bottom: 10px;
+            opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(10px) scale(0.95); z-index: 10;
+            transform-origin: bottom right;
         }
-        .contact-wrapper:hover .contact-popup { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        .contact-popup.active { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
 
         .contact-card {
-            background: #0a0a0a; border: 1px solid #333;
+            background: #111; border: 1px solid #333;
             border-radius: 16px; padding: 12px;
             display: flex; flex-direction: column; gap: 4px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
         }
         .popup-item {
             display: flex; align-items: center; gap: 12px;
-            padding: 10px 12px; border-radius: 8px;
+            padding: 12px 16px; border-radius: 8px;
             color: #ccc; text-decoration: none;
-            font-size: 0.9rem; font-weight: 500; transition: 0.2s;
+            font-size: 1rem; font-weight: 500; transition: 0.2s;
         }
-        .popup-item:hover { background: #222; color: white; }
-        .popup-item i { width: 18px; height: 18px; stroke-width: 1.5px; }
+        .popup-item:active { background: #333; color: white; }
+        .popup-item i { width: 18px; height: 18px; stroke-width: 2px; }
 
         /* --- WORLD CONTENT --- */
         .mask-container {
             position: relative; width: 100%; height: 100vh; overflow: hidden;
             display: flex; align-items: center; justify-content: center; background: #000;
         }
+
         .masked-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
-            clip-path: circle(0% at 50% 50%); z-index: 1; 
+            z-index: 1; 
             filter: grayscale(100%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(1.2);
+            -webkit-mask-image: radial-gradient(circle, black var(--mask-rad, 0%), transparent calc(var(--mask-rad, 0%) + 20%));
+            mask-image: radial-gradient(circle, black var(--mask-rad, 0%), transparent calc(var(--mask-rad, 0%) + 20%));
         }
+
         .mask-overlay {
              position: absolute; top: 0; left: 0; width: 100%; height: 100%;
              background: rgba(255,0,0,0.2); z-index: 2; pointer-events: none;
-             clip-path: circle(0% at 50% 50%); mix-blend-mode: overlay;
+             mix-blend-mode: overlay;
+             -webkit-mask-image: radial-gradient(circle, black var(--mask-rad, 0%), transparent calc(var(--mask-rad, 0%) + 20%));
+             mask-image: radial-gradient(circle, black var(--mask-rad, 0%), transparent calc(var(--mask-rad, 0%) + 20%));
         }
-        .mask-text { position: relative; z-index: 3; text-align: center; pointer-events: none; mix-blend-mode: difference; }
+        
+        .mask-text { 
+            position: absolute; 
+            top: 0; left: 0; width: 100%; height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 3; 
+            pointer-events: none; 
+            mix-blend-mode: difference; 
+            text-align: center;
+        }
 
-        .gallery-section { padding: 80px 0; overflow: hidden; background: #050505; }
+        .gallery-section { padding: 60px 0; overflow: hidden; background: #050505; }
         
         .gallery-track {
-            display: flex; gap: 40px; padding: 0 5vw;
+            display: flex; gap: 20px; padding: 0 5vw;
             overflow-x: auto; 
-            scroll-behavior: auto; /* Changed for smooth drag */
-            -webkit-overflow-scrolling: touch; /* Native smooth scrolling on iOS */
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; 
             -ms-overflow-style: none; scrollbar-width: none;
             cursor: grab; white-space: nowrap;
         }
@@ -235,17 +247,26 @@
         .gallery-track::-webkit-scrollbar { display: none; }
         
         .poster-item {
-            min-width: 350px; height: 500px; position: relative;
+            min-width: 280px; height: 420px; position: relative;
             transition: transform 0.4s ease; cursor: pointer;
             filter: grayscale(100%); flex-shrink: 0;
-            touch-action: auto; /* Allow scrolling */
+            border-radius: 8px; overflow: hidden;
+            touch-action: pan-x; 
         }
-        .poster-item:hover { transform: scale(0.98); filter: grayscale(0%); }
+        .poster-item:active, .poster-item:hover { transform: scale(0.96); filter: grayscale(0%); }
         .poster-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; pointer-events: none; }
-        .poster-item:hover img { transform: scale(1.1); }
+        .poster-item:active img, .poster-item:hover img { transform: scale(1.1); }
 
+        @media (min-width: 768px) {
+            .poster-item { min-width: 350px; height: 500px; }
+            .poster-item:hover { transform: scale(0.98); }
+        }
+
+        /* --- BENTO GRID EDITED --- */
         .bento-grid {
-            display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(2, 350px);
+            display: grid; grid-template-columns: repeat(12, 1fr); 
+            /* Added 3rd row (750px) for the Strategy box */
+            grid-template-rows: 350px 550px 750px; 
             gap: 20px; padding: 20px; max-width: 1400px; margin: 0 auto;
         }
         .bento-item {
@@ -255,18 +276,22 @@
             cursor: pointer; display: flex; flex-direction: column; justify-content: flex-end; padding: 30px;
             touch-action: manipulation;
         }
-        .bento-item:hover { border-color: var(--accent); }
+        .bento-item:hover, .bento-item:active { border-color: var(--accent); }
+        
         .bento-item h3 { font-size: 3rem; font-family: 'Teko', sans-serif; color: white; margin-bottom: 5px; position: relative; z-index: 2; line-height: 0.9; }
         .bento-item p { color: #888; font-size: 1rem; position: relative; z-index: 2; font-family: 'Inter', sans-serif; }
         .bento-bg {
             position: absolute; inset: 0; object-fit: cover; width: 100%; height: 100%; opacity: 0.4;
             transition: opacity 0.3s, transform 0.7s; z-index: 1; filter: grayscale(100%);
         }
-        .bento-item:hover .bento-bg { opacity: 0.7; transform: scale(1.05); filter: grayscale(0%); }
+        .bento-item:hover .bento-bg, .bento-item:active .bento-bg { opacity: 0.7; transform: scale(1.05); filter: grayscale(0%); }
+        
         .b-video { grid-column: span 8; }
         .b-growth { grid-column: span 4; }
         .b-posters { grid-column: span 4; grid-row: span 2; background: #000; }
-        .b-strategy { grid-column: span 8; }
+        
+        /* EDITED: Strategy now spans full width (12 cols) */
+        .b-strategy { grid-column: span 12; }
 
         /* --- 3D RING --- */
         #circular-gallery {
@@ -301,8 +326,8 @@
             touch-action: manipulation;
         }
         .ring-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: opacity 0.4s, transform 0.4s; pointer-events: none; }
-        .ring-item:hover { border-color: red; }
-        .ring-item:hover img { opacity: 1; transform: scale(1.05); }
+        .ring-item:hover, .ring-item:active { border-color: red; }
+        .ring-item:hover img, .ring-item:active img { opacity: 1; transform: scale(1.05); }
 
         .yza-header {
             position: absolute; top: 40px; left: 0; width: 100%;
@@ -315,17 +340,17 @@
             text-transform: uppercase; letter-spacing: 1px;
             touch-action: manipulation;
         }
-        .yza-back:hover { color: var(--accent); transform: translateX(-5px); }
+        .yza-back:active { color: var(--accent); transform: scale(0.9); }
 
         #poster-modal {
-            position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.98);
+            position: fixed; inset: 0; z-index: 999999; background: rgba(0,0,0,0.98);
             display: flex; align-items: center; justify-content: center;
             opacity: 0; pointer-events: none; transition: opacity 0.3s;
         }
         #poster-modal.open { opacity: 1; pointer-events: auto; }
         #modal-img { max-height: 85vh; max-width: 90vw; box-shadow: 0 0 100px rgba(255,0,0,0.2); }
         .close-modal { position: absolute; top: 40px; right: 40px; color: white; font-size: 40px; cursor: pointer; transition: 0.3s; touch-action: manipulation; }
-        .close-modal:hover { color: red; transform: rotate(90deg); }
+        .close-modal:active { color: red; transform: rotate(90deg); }
 
         .sde-card { 
             background: #fff; border: 1px solid #e2e8f0; 
@@ -333,12 +358,12 @@
             position: relative; overflow: hidden;
             touch-action: manipulation;
         }
-        .sde-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); border-color: #cbd5e1; }
+        .sde-card:active, .sde-card:hover { transform: scale(0.98) translateY(-5px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); border-color: #cbd5e1; }
         .sde-card::before {
             content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
             background: #0f172a; transform: scaleY(0); transition: transform 0.4s ease; transform-origin: bottom;
         }
-        .sde-card:hover::before { transform: scaleY(1); }
+        .sde-card:active::before, .sde-card:hover::before { transform: scaleY(1); }
         
         .eng-social-btn {
             display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -348,14 +373,15 @@
             touch-action: manipulation;
         }
         .eng-btn-primary { background: #0f172a; color: white; border: 1px solid #0f172a; }
-        .eng-btn-primary:hover { background: #1e293b; }
+        .eng-btn-primary:active, .eng-btn-primary:hover { background: #1e293b; transform: scale(0.98); }
         .eng-btn-outline { background: transparent; color: #0f172a; border: 1px solid #cbd5e1; }
-        .eng-btn-outline:hover { background: #fff; border-color: #0f172a; }
+        .eng-btn-outline:active, .eng-btn-outline:hover { background: #f1f5f9; border-color: #0f172a; transform: scale(0.98); }
 
         .monkey-img { width: 100%; max-width: 300px; border-radius: 0; border: 1px solid #333; transition: transform 0.5s; }
-        .monkey-img:hover { transform: scale(1.02) rotate(-1deg); border-color: red; }
+        .monkey-img:hover, .monkey-img:active { transform: scale(1.02) rotate(-1deg); border-color: red; }
+
         .tea-link { position: relative; text-decoration: none; color: #666; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); display: block; width: fit-content; }
-        .tea-link:hover { color: #fff; transform: translateX(20px); }
+        .tea-link:active, .tea-link:hover { color: #fff; transform: translateX(10px); }
         
         .neon-glow { 
             transition: text-shadow 1.5s ease-in-out; 
@@ -394,23 +420,19 @@
             #split-screen { flex-direction: column; }
             .split { width: 100%; height: 50%; border-right: none; border-bottom: 1px solid #333; }
             
-            /* Hide custom cursor and noise on mobile */
-            .cursor-dot, .cursor-outline, .noise { display: none !important; }
-            body { cursor: auto !important; }
-            
             /* Fix nav pill */
-            .nav-pill-container { width: 92%; bottom: 20px; }
-            .nav-pill { height: 50px; }
-            .nav-link { font-size: 0.9rem; padding: 6px 12px; }
-            .nav-cta { padding: 0 16px; font-size: 0.75rem; }
-            .nav-links-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-
+            .nav-pill-container { width: auto; max-width: 98vw; bottom: 25px; }
+            .nav-link { padding: 6px 8px; font-size: 0.95rem; } 
+            .nav-cta { padding: 0 12px; font-size: 0.75rem; }
+            
             /* Bento Grid vertical stack */
             .bento-grid { display: flex; flex-direction: column; height: auto; }
-            .bento-item { height: 300px; }
+            .bento-item { height: 300px; padding: 20px; }
+            .b-strategy { height: 350px !important; }
+            .bento-item h3 { font-size: 2.5rem; }
 
             /* Gallery items smaller */
-            .poster-item { min-width: 280px; height: 400px; }
+            .poster-item { min-width: 260px; height: 380px; }
             
             /* Force text visibility on split screen mobile */
             .split .reveal-elem { 
@@ -427,12 +449,13 @@
             .ring-center-text h2 { font-size: 4rem; }
             
             /* Padding fixes */
-            .contact-glass { padding: 30px; }
-            .yza-header { padding: 0 20px; }
+            .contact-glass { padding: 25px; }
+            .yza-header { padding: 0 20px; top: 20px; }
             .close-modal { top: 20px; right: 20px; }
             
             /* Ring adjustments */
-            .ring-item { width: 220px; height: 320px; left: -110px; top: -160px; }
+            .ring-item { width: 200px; height: 300px; left: -100px; top: -150px; }
+            .ring-center-text p { font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -447,22 +470,31 @@
         <div class="curtain-bottom"></div>
     </div>
 
+    <script>
+        (function() {
+            const savedWorld = localStorage.getItem('activeWorld');
+            if (savedWorld) {
+                document.body.classList.add('skip-loader');
+            }
+        })();
+    </script>
+
     <div class="nav-pill-container" id="floating-nav">
         <div class="nav-pill">
-            <div class="nav-avatar"><img src="lk.png" alt="LK"></div>
+            <div class="nav-avatar"><img src="LK.png" alt="LK"></div>
             
             <div class="nav-links-wrapper">
                 <div class="nav-links">
                     <a href="#" class="nav-link" id="nav-home">HOME</a>
                     <a href="#" class="nav-link" id="nav-work">WORK</a>
                     <a href="#" class="nav-link" id="nav-about">ABOUT</a>
-                    <a href="#" onclick="goBack()" class="nav-link switch-btn">SWITCH</a>
+                    <a href="#" onclick="handleSwitch()" class="nav-link switch-btn">SWITCH</a>
                 </div>
             </div>
 
             <div class="contact-wrapper">
-                <a href="mailto:Lakshmikanthark20@gmail.com" class="nav-cta">CONTACT +</a>
-                <div class="contact-popup">
+                <button onclick="toggleContact()" class="nav-cta" id="contact-trigger">CONTACT</button>
+                <div class="contact-popup" id="contact-popup">
                     <div class="contact-card">
                         <a href="mailto:Lakshmikanthark20@gmail.com" class="popup-item"><i data-lucide="mail"></i> Email</a>
                         <a href="tel:+919901456389" class="popup-item"><i data-lucide="phone"></i> Phone</a>
@@ -565,11 +597,11 @@
     </div>
 
     <div id="creator-world" class="hidden-section relative min-h-screen bg-black text-white">
-        <div class="mask-container">
+        <div class="mask-container" id="creator-world-top">
             <video class="masked-bg" autoplay muted loop playsinline><source src="original-15a657f5c71980b123bb804536291ba8.mp4" type="video/mp4"></video>
             <div class="mask-overlay"></div>
             <div class="mask-text">
-                <p class="text-red-500 tracking-[1em] text-xs mb-6 font-bold">EST. 2024</p>
+                <p class="text-red-500 tracking-[1em] text-xs mb-6 font-bold">ESTD. 2025</p>
                 <h1 class="mega-text tea-font neon-glow" data-text="TEA">TEA</h1>
                 <p class="text-xl mt-4 font-light tracking-widest opacity-50">THIRD EYE AGENCY</p>
             </div>
@@ -607,11 +639,44 @@
                     <h2 class="tea-font text-6xl text-white">CAPABILITIES</h2>
                     <span class="text-red-500 tea-font text-2xl">01 — 04</span>
                 </div>
+                
                 <div class="bento-grid">
-                    <div class="bento-item b-video" data-hover><img src="POSTERS/1.png" class="bento-bg" alt="Video" loading="lazy"><h3>VIBESTREET STUDIO</h3><p>Social Media & Web Solutions.</p></div>
-                    <div class="bento-item b-posters" onclick="openCircularGallery()" data-hover><img src="POSTERS/2.png" class="bento-bg" alt="Posters" loading="lazy"><div class="absolute top-4 right-4 text-red-500"><i data-lucide="arrow-up-right" size="32"></i></div><h3>VISUAL DESIGN<br><span class="text-red-500">& POSTERS</span></h3><p class="mt-auto text-red-500">ENTER ARCHIVE →</p></div>
-                    <div class="bento-item b-growth" data-hover><img src="POSTERS/3.png" class="bento-bg" alt="Growth" loading="lazy"><h3>GROWTH</h3><p>B2B Outreach & Digital Marketing.</p></div>
-                    <div class="bento-item b-strategy" data-hover><img src="POSTERS/4.png" class="bento-bg" alt="Strategy" loading="lazy"><h3>STRATEGY</h3><p>50+ Visual Assets & Campaigns.</p></div>
+                    <div class="bento-item b-video" data-hover>
+                        <img src="POSTERS/1.png" class="bento-bg" alt="Video" loading="lazy">
+                        <h3>VIBESTREET STUDIO</h3>
+                        <p>Social Media & Web Solutions.</p>
+                    </div>
+                    
+                    <div class="bento-item b-posters" onclick="openCircularGallery()" data-hover>
+                        <video class="bento-bg" autoplay loop muted playsinline>
+                            <source src="skull.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="absolute top-4 right-4 text-red-500">
+                            <i data-lucide="arrow-up-right" size="32"></i>
+                        </div>
+                        <h3>VISUAL DESIGN<br><span class="text-red-500">& POSTERS</span></h3>
+                        <p class="mt-auto text-red-500">ENTER ARCHIVE →</p>
+                    </div>
+
+                    <div class="bento-item b-growth" data-hover>
+                         <video class="bento-bg" autoplay loop muted playsinline>
+                            <source src="gw.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+
+                        <h3>GROWTH</h3>
+                        <p>B2B Outreach & Digital Marketing.</p>
+                    </div>
+                    
+                    <div class="bento-item b-strategy" data-hover>
+                       <video class="bento-bg" autoplay loop muted playsinline>
+                            <source src="sh.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <h3>STRATEGY</h3>
+                        <p>50+ Visual Assets & Campaigns.</p>
+                    </div>
                 </div>
             </div>
 
@@ -627,20 +692,20 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col items-center lg:items-start text-center lg:text-left gap-10 pl-8 border-l border-gray-700">
-                            <div>
-                                <h2 class="tea-font text-7xl mb-4 text-white">HAVE WORK?</h2>
-                                <a href="mailto:Lakshmikanthark20@gmail.com" class="inline-block bg-red-600 text-white px-12 py-4 tea-font text-2xl hover:bg-white hover:text-black transition-all transform hover:scale-105" data-hover>HIRE ME</a>
-                            </div>
-                            <div class="relative group"><img src="monkey-laptop.gif" alt="New GIF" class="monkey-img relative z-10" style="max-width:300px;"></div>
-                        </div>
-
                         <div class="flex flex-col gap-6 pl-8 border-l border-gray-700">
                             <div class="text-gray-400 tea-font text-xl tracking-widest mb-4">SOCIALS</div>
                             <a href="mailto:Lakshmikanthark20@gmail.com" class="tea-link tea-font text-5xl text-white flex items-center justify-between group" data-hover><span>EMAIL</span></a>
                             <a href="https://instagram.com" target="_blank" class="tea-link tea-font text-5xl text-white flex items-center justify-between group" data-hover><span>INSTAGRAM</span></a>
                             <a href="https://linkedin.com/in/lakshmikantha-r-k" target="_blank" class="tea-link tea-font text-5xl text-white flex items-center justify-between group" data-hover><span>LINKEDIN</span></a>
-                            <div class="mt-10 text-gray-500 font-mono text-xs uppercase tracking-widest"><p>© 2024 Third Eye Agency (Vibestreet Studio)</p><p>Bengaluru, KA, India.</p></div>
+                            <div class="mt-10 text-gray-500 font-mono text-xs uppercase tracking-widest"><p>© 2025 Third Eye Agency </p><p>Bengaluru, India.</p></div>
+                        </div>
+
+         <div class="flex flex-col items-center lg:items-start text-center lg:text-left gap-10 pl-8 border-l border-gray-700">
+                            <div>
+                                <h2 class="tea-font text-7xl mb-4 text-white">HAVE WORK?</h2>
+                                <a href="mailto:Lakshmikanthark20@gmail.com" class="inline-block bg-red-600 text-white px-12 py-4 tea-font text-2xl hover:bg-white hover:text-black transition-all transform hover:scale-105" data-hover>HIRE ME</a>
+                            </div>
+                            <div class="relative group"><img src="monkey-laptop.gif" alt="New GIF" class="monkey-img relative z-10" style="max-width:300px;"></div>
                         </div>
 
                     </div>
@@ -662,98 +727,176 @@
     <script>
         // --- CONFIGURATION ---
         const posterCount = 10; 
-        const posterPath = ""; // Removed "POSTERS/" since files are 1.png, 2.png etc.
+        const posterPath = ""; 
         const posterExt = ".png"; 
 
         lucide.createIcons();
         gsap.registerPlugin(ScrollTrigger);
 
+        // --- SCROLL & STATE PERSISTENCE ---
+        const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', smooth: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        // Save scroll position before reload
+        window.addEventListener('beforeunload', () => {
+            sessionStorage.setItem('scrollPos', window.scrollY);
+        });
+
+        // --- UPDATED LOADING LOGIC ---
         window.addEventListener("load", () => {
             const tl = gsap.timeline();
-            setTimeout(() => {
-                tl.to(".loader-logo", { opacity: 0, duration: 0.5 })
-                  .to(".curtain-top", { y: "-100%", duration: 1.5, ease: "power4.inOut" }, "split")
-                  .to(".curtain-bottom", { y: "100%", duration: 1.5, ease: "power4.inOut" }, "split")
-                  .set("#preloader", { display: "none" })
-                  .to(".reveal-elem", { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power3.out" }, "-=0.5")
-                  .to(".nav-pill-container", { opacity: 1, duration: 1 }, "-=1");
-            }, 1500);
+            
+            // Check for saved world
+            const savedWorld = localStorage.getItem('activeWorld');
+            const savedScroll = sessionStorage.getItem('scrollPos');
+
+            if (savedWorld) {
+                // INSTANT RESTORE PATH (No Animation)
+                // Ensure preloader is gone
+                document.getElementById('preloader').style.display = 'none';
+                
+                // Immediately enter world
+                enterWorld(savedWorld, false);
+                
+                // Show nav
+                gsap.set(".nav-pill-container", { opacity: 1 });
+                gsap.set(".reveal-elem", { y: 0, opacity: 1 });
+                
+                // Restore scroll
+                if (savedScroll) {
+                    setTimeout(() => {
+                        window.scrollTo(0, parseFloat(savedScroll));
+                        lenis.scrollTo(parseFloat(savedScroll), { immediate: true });
+                    }, 50);
+                }
+                
+                lucide.createIcons();
+
+            } else {
+                // NORMAL ANIMATION PATH (First Visit)
+                setTimeout(() => {
+                    tl.to(".loader-logo", { opacity: 0, duration: 0.5 })
+                      .to(".curtain-top", { y: "-100%", duration: 1.5, ease: "power4.inOut" }, "split")
+                      .to(".curtain-bottom", { y: "100%", duration: 1.5, ease: "power4.inOut" }, "split")
+                      .set("#preloader", { display: "none" })
+                      .to(".reveal-elem", { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power3.out" }, "-=0.5")
+                      .to(".nav-pill-container", { opacity: 1, duration: 1 }, "-=1");
+                }, 1500);
+            }
         });
 
         const cursorDot = document.querySelector('.cursor-dot');
         const cursorOutline = document.querySelector('.cursor-outline');
-        window.addEventListener("mousemove", (e) => {
-            if (window.innerWidth <= 768) return; // Disable on mobile
-            const posX = e.clientX;
-            const posY = e.clientY;
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
-            cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" });
-        });
+
+        function moveCursor(x, y) {
+            cursorDot.style.left = `${x}px`;
+            cursorDot.style.top = `${y}px`;
+            cursorOutline.animate({ left: `${x}px`, top: `${y}px` }, { duration: 500, fill: "forwards" });
+        }
+
+        window.addEventListener("mousemove", (e) => { moveCursor(e.clientX, e.clientY); });
+        window.addEventListener("touchmove", (e) => { const touch = e.touches[0]; moveCursor(touch.clientX, touch.clientY); });
+
         document.querySelectorAll("[data-hover]").forEach(el => {
             el.addEventListener("mouseenter", () => document.body.classList.add("hovered"));
             el.addEventListener("mouseleave", () => document.body.classList.remove("hovered"));
+            el.addEventListener("touchstart", () => document.body.classList.add("hovered"));
+            el.addEventListener("touchend", () => document.body.classList.remove("hovered"));
         });
 
-        const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', smooth: true });
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
+        // --- NAVIGATION CLICK INTERCEPTION ---
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    e.preventDefault();
+                    lenis.scrollTo(href, { offset: -50 }); 
+                }
+            });
+        });
 
         const splitScreen = document.getElementById('split-screen');
         const engWorld = document.getElementById('engineer-world');
         const creatorWorld = document.getElementById('creator-world');
         const navPillContainer = document.querySelector('.nav-pill-container');
-        const navPill = document.querySelector('.nav-pill'); // Get the nav pill itself
+        const navPill = document.querySelector('.nav-pill'); 
         const navHome = document.getElementById('nav-home');
         const navWork = document.getElementById('nav-work');
         const navAbout = document.getElementById('nav-about');
 
-        function enterWorld(type) {
-            document.body.classList.remove('hovered'); // Immediate cursor fix
-            splitScreen.style.transform = 'translateY(-100%)';
+        // --- UPDATED ENTRY LOGIC ---
+        function enterWorld(type, pushHistory = true) {
+            if (pushHistory) {
+                history.pushState({ world: type }, "", `#${type}`);
+            }
+            // Save state to local storage
+            localStorage.setItem('activeWorld', type);
+            applyWorldState(type, !pushHistory); // Pass "true" if instant (no animation)
+        }
+
+        function applyWorldState(type, isInstant = false) {
+            document.body.classList.remove('hovered'); 
+            
+            // If instant, remove transition delay
+            if(isInstant) {
+                splitScreen.style.transition = 'none';
+                splitScreen.style.transform = 'translateY(-100%)';
+                // Force layout reflow
+                splitScreen.offsetHeight; 
+                splitScreen.style.transition = ''; // Restore for later
+            } else {
+                splitScreen.style.transform = 'translateY(-100%)';
+            }
+            
+            const delay = isInstant ? 0 : 800; 
             
             setTimeout(() => {
                 if(type === 'engineer') {
                     engWorld.classList.remove('hidden-section');
+                    creatorWorld.classList.add('hidden-section');
                     document.body.style.backgroundColor = '#f8fafc';
-                    document.body.style.cursor = 'auto';
+                    document.body.style.cursor = 'auto'; 
                     document.querySelector('.cursor-dot').style.display = 'none';
                     document.querySelector('.cursor-outline').style.display = 'none';
                     navPillContainer.classList.add('expanded');
                     
-                    // NAV COLOR UPDATE: BLUE
                     navPill.classList.remove('red-mode');
                     navPill.classList.add('blue-mode');
                     
-                    // NAV LINKS
-                    navHome.href = "#eng-home";
-                    navWork.href = "#eng-projects";
-                    navAbout.href = "#eng-bio";
+                    navHome.setAttribute('href', '#eng-home');
+                    navWork.setAttribute('href', '#eng-projects');
+                    navAbout.setAttribute('href', '#eng-bio');
 
-                } else {
+                } else if (type === 'creator') {
                     creatorWorld.classList.remove('hidden-section');
+                    engWorld.classList.add('hidden-section');
                     document.body.style.backgroundColor = '#000';
-                    if (window.innerWidth > 768) {
-                        document.querySelector('.cursor-dot').style.display = 'block';
-                        document.querySelector('.cursor-outline').style.display = 'block';
-                    }
+                    document.querySelector('.cursor-dot').style.display = 'block';
+                    document.querySelector('.cursor-outline').style.display = 'block';
+                    
                     navPillContainer.classList.add('expanded');
                     
-                    // NAV COLOR UPDATE: RED
                     navPill.classList.remove('blue-mode');
                     navPill.classList.add('red-mode');
                     
-                    // NAV LINKS
-                    navHome.href = "#creator-world";
-                    navWork.href = "#creator-work"; 
-                    navAbout.href = "#creator-bio"; 
+                    navHome.setAttribute('href', '#creator-world-top');
+                    navWork.setAttribute('href', '#creator-work'); 
+                    navAbout.setAttribute('href', '#creator-bio'); 
 
                     initCreatorAnimations();
                     initGallery(); 
                 }
-                window.scrollTo(0,0);
                 lucide.createIcons();
-            }, 800);
+            }, delay);
+        }
+
+        function handleSwitch() {
+            // Clear storage so we go back to split screen
+            localStorage.removeItem('activeWorld');
+            sessionStorage.removeItem('scrollPos');
+            goBack();
+            history.replaceState(null, null, ' '); 
         }
 
         function goBack() {
@@ -763,41 +906,76 @@
             document.body.style.backgroundColor = '#000';
             
             navPillContainer.classList.remove('expanded');
-            // RESET NAV COLORS
             navPill.classList.remove('blue-mode', 'red-mode');
+            
+            document.getElementById('contact-popup').classList.remove('active');
         }
+
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.world) {
+                enterWorld(event.state.world, false);
+            } else {
+                goBack();
+            }
+        });
+
+        // --- CONTACT TOGGLE LOGIC ---
+        function toggleContact() {
+            const popup = document.getElementById('contact-popup');
+            popup.classList.toggle('active');
+        }
+
+        document.addEventListener('click', (e) => {
+            const popup = document.getElementById('contact-popup');
+            const trigger = document.getElementById('contact-trigger');
+            if (!popup.contains(e.target) && !trigger.contains(e.target)) {
+                popup.classList.remove('active');
+            }
+        });
+
 
         function initCreatorAnimations() {
             ScrollTrigger.getAll().forEach(t => t.kill());
-            gsap.fromTo(".masked-bg", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(100% at 50% 50%)", ease: "power2.inOut", scrollTrigger: { trigger: ".mask-container", start: "top top", end: "bottom top", scrub: 1, pin: true } });
-            gsap.fromTo(".mask-overlay", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(100% at 50% 50%)", ease: "power2.inOut", scrollTrigger: { trigger: ".mask-container", start: "top top", end: "bottom top", scrub: 1 } });
-            gsap.to(".mask-text", { opacity: 0, scale: 1.5, scrollTrigger: { trigger: ".mask-container", start: "top top", end: "50% top", scrub: 1 } });
+            document.querySelectorAll('.masked-bg, .mask-overlay').forEach(el => {
+                el.style.setProperty('--mask-rad', '0%');
+            });
+            let maskObj = { val: 0 };
+            gsap.to(maskObj, {
+                val: 150,
+                ease: "power2.inOut",
+                scrollTrigger: {
+                    trigger: ".mask-container",
+                    start: "top top",
+                    end: "+=2000", 
+                    scrub: 1, 
+                    pin: true
+                },
+                onUpdate: () => {
+                    document.querySelectorAll('.masked-bg, .mask-overlay').forEach(el => {
+                        el.style.setProperty('--mask-rad', maskObj.val + '%');
+                    });
+                }
+            });
+
+            gsap.to(".mask-text", { opacity: 0, scale: 1.5, scrollTrigger: { trigger: ".mask-container", start: "top top", end: "+=1000", scrub: 1 } });
             gsap.utils.toArray('.bento-item').forEach(item => {
                 gsap.to(item.querySelector('.bento-bg'), { yPercent: 20, ease: "none", scrollTrigger: { trigger: item, scrub: true } });
             });
         }
 
-        // --- GALLERY SCROLL LOGIC ---
         const track = document.getElementById('gallery-track');
         let isHovered = false;
 
-        // Auto Scroll Function
         function autoScroll() { 
             if (!isHovered) { track.scrollLeft += 1; } 
             requestAnimationFrame(autoScroll); 
         }
         autoScroll();
 
-        // Mouse Interactions
         track.addEventListener('mouseenter', () => isHovered = true);
         track.addEventListener('mouseleave', () => isHovered = false);
-
-        // Touch Interactions (Mobile Drag Fix)
         track.addEventListener('touchstart', () => { isHovered = true; }, {passive: true});
-        track.addEventListener('touchend', () => { 
-            // Resume scrolling after a short delay so the user can read
-            setTimeout(() => isHovered = false, 1000); 
-        });
+        track.addEventListener('touchend', () => { setTimeout(() => isHovered = false, 1500); });
 
         function initGallery() {
             if(track.children.length === 0) {
@@ -807,13 +985,12 @@
                         const div = document.createElement('div');
                         div.className = 'poster-item';
                         div.setAttribute('data-hover', '');
-                        
-                        // Using onclick for touch support as well
                         div.onclick = function() { openModal(this); };
-                        
                         div.innerHTML = `<img src="${src}">`;
                         div.addEventListener("mouseenter", () => document.body.classList.add("hovered"));
                         div.addEventListener("mouseleave", () => document.body.classList.remove("hovered"));
+                        div.addEventListener("touchstart", () => document.body.classList.add("hovered"));
+                        div.addEventListener("touchend", () => document.body.classList.remove("hovered"));
                         track.appendChild(div);
                     }
                 }
@@ -829,7 +1006,7 @@
         function initRing() {
             ring.innerHTML = ''; 
             const isMobile = window.innerWidth <= 768;
-            const radius = isMobile ? 400 : 900; // Smaller radius for mobile
+            const radius = isMobile ? 400 : 900; 
             const step = 360 / posterCount;
             for (let i = 1; i <= posterCount; i++) {
                 const src = `${posterPath}${i}${posterExt}`;
@@ -872,7 +1049,6 @@
         function closeCircularGallery() { overlay.classList.remove('active'); ringState.active = false; document.body.style.overflow = ''; lenis.start(); }
         window.addEventListener('wheel', (e) => { if (!ringState.active) return; ringState.target -= e.deltaY * 0.15; });
 
-        // Add Touch Support for Ring
         let touchStartX = 0;
         window.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
         window.addEventListener('touchmove', (e) => {
@@ -889,6 +1065,4 @@
         function closeModal() { modal.classList.remove('open'); }
     </script>
 </body>
-
 </html>
-
