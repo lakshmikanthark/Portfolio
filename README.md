@@ -1,37 +1,46 @@
-# LK Portfolio — production candidate
+# LK portfolio — complete search release
 
-This package contains the reviewed website files for lakshmikantha.in. It has not been uploaded to your repository or published from this session. Analytics and Google ownership verification still need your own account setup. See MEASUREMENT-SETUP.md.
+Prepared 31 October 2026. This is the full existing static portfolio plus seven supporting pages, with the original touch-scroll code restored. No change has been published to lakshmikantha.in from this session.
 
-## Publish
+## Publish through the existing repository
 
-1. Keep a backup of the current repository revision so you can revert the release.
-2. Extract this ZIP. Upload index.html, 404.html, robots.txt, sitemap.xml, CNAME, .nojekyll and the complete assets directory to the top level of the existing portfolio deployment.
-3. Preserve any unrelated existing deployment or domain configuration. CNAME in this package contains lakshmikantha.in.
-4. Wait for deployment success, then verify the live homepage, all project links, the résumé PDF, quote email links, enquiry draft form, motion controls and mobile layout.
-5. Check https://lakshmikantha.in/robots.txt, https://lakshmikantha.in/sitemap.xml and https://lakshmikantha.in/assets/share.png. Complete Google setup and inspect events in your own property before calling measurement active.
+Use the existing `lakshmikanthark/Portfolio` repository and its actual Pages publishing source. Extract `LK-Final-SEO-Original-Scroll-Update.zip` over the existing site, or use `LK-Final-SEO-Original-Scroll-Complete.zip` for the complete source. Its `index.html`, assets and page folders belong at the existing website root. Do not upload the ZIP itself as a web page or nest the site inside an extra folder. Preserve any newer repository changes and Google verification material. These packages replace the earlier animation candidate; previous update ZIPs are not needed. The update explicitly includes the restored `assets/js/ui.js`, so it also corrects an installation of that earlier candidate.
 
-If a critical journey fails, revert to the previous known-working repository revision and verify that it is live. Do not delete the entire repository as a troubleshooting step.
+The package retains the cinematic homepage composition, knight assets, styles, silent experience, original After Hours red, domain file and current résumé. The homepage adds an About footer link and uses neutral Technofly project wording where its earlier internship label conflicted with the résumé. Supporting pages use their own stylesheet and require no build, installation or new hosting service.
 
-## Replace the résumé
+The complete original `assets/js/ui.js` is restored byte-for-byte, including touch easing, swipe gain, release momentum, bounded queued travel, reversals and the slower dispersing/brand-fade passages. Desktop wheel and anchor glides, native controls, pinch zoom and reduced-motion behaviour are retained. Stable layout dimensions are still cached between layout changes, and WebGL size limits are queried once per context. The original animation timeline, mesh, shaders, particle counts and render resolution remain unchanged. Updated script-version URLs request the restored release. These implementation checks do not establish smoothness or resolve the reported hanging on a physical phone. Full WebGL2 visual verification and actual-phone testing remain outstanding.
 
-Replace only assets/resume.pdf with your latest PDF, keeping the filename. Every résumé button uses this file. The included PDF is the previous existing résumé; its content has not been rewritten. Hosting/browser caches may take time to refresh after replacement.
+## Public routes
 
-## Contact
+- `/`
+- `/about/`
+- `/services/business-websites/`
+- `/work/maison-solenne/`
+- `/work/yodha/`
+- `/notes/`
+- `/notes/business-website-launch-checklist/`
+- `/notes/email-drafts-and-enquiries/`
 
-Service quote buttons open an email to lakshmikanthark20@gmail.com directly, without scrolling to Contact. The enquiry form prepares a draft in the visitor's email app; they review it and press Send. Copy enquiry provides a fallback. A draft or mailto click is not proof that an email was sent or received. No website enquiry backend is included or needed for this flow.
+These eight canonical URLs are in sitemap.xml. Each page has its own metadata and a consistent Person identity. Concepts and demos remain labelled. No sales, traffic, commissioning or ranking result is invented.
 
-## Experience
+## After deployment
 
-The portfolio is silent, with no sound control or audio code. After Hours uses the owner's original dark red (#990000). Reduced-motion visitors receive a readable still version without downloading the 3D mesh. Videos remain muted and begin as the cards enter view. If the scene fails to load, the site falls back to readable content.
+Open all eight routes on the actual domain. Check the homepage experience, navigation, project destinations, résumé and enquiry draft/copy controls. Check a real phone and the missing-page response. Validate the deployed structured data, refresh the sitemap in the existing Search Console property and inspect important URLs. Preserve the working domain and ownership-verification method.
 
-The compressed 3D asset is fetched by assets/js/loader.js, with a JSON fallback for older browsers. Keep both knight.json.gz and knight.json. A plain file:// opening is not a reliable way to test the production package's fetches; serve it with a local HTTP server or use the separate self-contained HTML review copy.
+Analytics is optional and currently unconfigured. See `MEASUREMENT-SETUP.md`. The seven supporting pages have no visitor analytics. Email links open a draft; a click is not proof of delivery. A blank GA4 ID does not prevent the website from being published or indexed.
 
-## Local preview
+## Maintenance and rollback
 
-From the extracted folder, run `python3 -m http.server 4173`, then open http://localhost:4173/. The deployable website has no build step or package installation requirement.
+Replace `assets/resume.pdf` to update the résumé. Keep both knight.json.gz and knight.json for the original scene. Use the existing publishing process for content changes. Test this fetched-asset site over HTTP rather than opening index.html directly from the filesystem.
 
-## Scope
+Before merging, retain the existing production revision. If the release causes a critical regression, revert the release through a new commit while preserving unrelated changes, then verify the previous experience is live. Do not delete the repository or change DNS as a routine rollback.
 
-Briefspindle and SEONY remain labelled demos. No live scans, paid access or payment gateway are promised. The original cinematic design, scene sequence, early video playback, gold handwriting and approved navigation proportions are retained. Metadata now emphasizes Business Analyst/Operations opportunities and freelance websites/AI workflows.
+Font and web-vitals licenses remain in assets/licenses. Review-only HTML, research, launch drafts, screenshots and private working files are excluded from the website archive.
 
-Font and web-vitals licenses are included in assets/licenses. The detailed internal audit is supplied separately and is not part of the public website payload.
+## Audit improvements in this revision
+
+The About introduction now offers website services and the résumé directly. All seven supporting pages expose the public email address with a progressive Copy email control and manual fallback. Copying uses only the public address, without tracking or storing enquiry contents. The readable address remains available without JavaScript. The 404 page gives accurate recovery links instead of claiming every missing page moved.
+
+Optional developer check: run `node tests/contact-copy.test.cjs`. This uses Node's standard library to exercise successful copying, an unavailable Clipboard API and denied permission. It is not a real-device test. Check copying on the actual HTTPS site after deployment; the HTTP preview exercises the manual fallback.
+
+Run `node tests/animation-performance.test.cjs` for restored swipe gain/momentum, phase speed limits, bounded queued travel and reversals, native input, pinch cancellation, wheel/anchor/reduced-motion behaviour, layout-cache invalidation and graphics-context checks. In a Git checkout containing the earlier search revision, add `--compare` to compare the original and restored gesture traces and the original and cached animation styles under the same simulated inputs. These are Node VM behaviour checks, not physical-phone FPS measurements or a full GPU rendering test.

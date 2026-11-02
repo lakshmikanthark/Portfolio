@@ -2,14 +2,20 @@
 
 Use Google Search Console to understand discovery in Google. Use Google Analytics 4 (GA4) to understand what visitors do. Keep these accounts under your own control. The website currently has no connected GA4 property and collects no Google Analytics data.
 
+## Release scope: measurement is separate from publication
+
+The homepage already contains optional consent-controlled GA4 code, but `ga4MeasurementId` is blank. It currently sends no Google Analytics data. The seven new supporting pages load no analytics scripts. Adding a homepage ID will not instrument those pages automatically; their implementation and privacy wording must be updated together if measurement is later added.
+
+The website can launch without analytics. Use Search Console and a private enquiry ledger first. Never invent a Measurement ID, treat an email-draft open as a completed lead, or announce working analytics before the receiving property has been checked.
+
 ## 1. Verify your website in Search Console
 
 1. Open https://search.google.com/search-console/ using your Google account.
-2. Add the URL-prefix property `https://lakshmikantha.in/`.
-3. Choose HTML-file verification if you want to avoid editing DNS. Download the verification file Google provides and publish that exact file at your website's root. Return to Google and verify it. Keep the file there afterward.
+2. Select the existing property for `https://lakshmikantha.in/` when present. The owner has already supplied a URL Inspection live-test and indexing-request screenshot. Do not create a duplicate property just to repeat that request.
+3. Check the existing ownership-verification method and preserve it. If verification is actually required and Google offers HTML-file verification, publish the exact file it provides at the website root and keep it there.
 4. Alternatively, choose a Domain property and follow Google's DNS TXT verification instructions if you control the domain's DNS. Never remove unrelated DNS records.
 5. After the new portfolio is published, submit `https://lakshmikantha.in/sitemap.xml` under Sitemaps.
-6. Inspect `https://lakshmikantha.in/` in URL Inspection, test its live URL, and request indexing when it is eligible.
+6. Inspect the eight canonical routes in sitemap.xml. Compare indexed state and live testing; request indexing when appropriate. An accepted request does not establish indexing, and repeated requests do not advance the queue.
 7. Check the Performance report for impressions, clicks and queries containing your name. These reports take time to accumulate data. Site changes do not guarantee indexing or a particular rank.
 
 Your LinkedIn already links to the portfolio. Keep the same full name and website link on your professional profiles, résumé and GitHub profile. No new social accounts are needed for this launch.
@@ -27,7 +33,7 @@ Your LinkedIn already links to the portfolio. Keep the same full name and websit
 9. Inspect your own property's Realtime report. Use DebugView/Tag Assistant when needed. A script loading is not proof that your property received an event. Do not announce analytics as working until you can see the expected events there.
 10. Return to Privacy → Analytics preferences to test declining and allowing analytics again.
 
-No GA4 ID, Search Console verification token, Google login or real receiving-property access has been supplied yet. Those account steps remain pending.
+No GA4 Measurement ID or receiving-property access has been supplied. Signed-in Search Console state has not been independently inspected in this session. Preserve the owner’s existing verification method; add a new token only if the actual property requires it.
 
 ## 3. What the events mean
 
