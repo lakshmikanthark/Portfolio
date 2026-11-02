@@ -137,6 +137,9 @@ function renderSize(cssWidth,cssHeight,deviceRatio,mobile,maxSize=8192){
 function createScene(canvas){
   const gl=canvas.getContext('webgl2',{antialias:true,alpha:true,premultipliedAlpha:false,preserveDrawingBuffer:false,powerPreference:'default'});
   if(!gl)throw new Error('WebGL2 unavailable');
+  // Context limits are fixed. Query them once instead of synchronizing with
+  // the graphics driver for every main-scene and navigation-knight frame.
+  const maxSize=Math.min(gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),gl.getParameter(gl.MAX_TEXTURE_SIZE));
   const prog=program(gl,VS,FS);const src=root.KNIGHT_MESH_B64;if(!src)throw new Error('mesh data missing');
   const pos=new Float32Array(b64bytes(src.positions).buffer),nrm=new Int16Array(b64bytes(src.normals).buffer),idx=new Uint32Array(b64bytes(src.indices).buffer);
   const vao=gl.createVertexArray();gl.bindVertexArray(vao);
@@ -156,7 +159,7 @@ function createScene(canvas){
   let width=0,height=0;
   function resize(){
     if(disposed||gl.isContextLost())throw new Error('Knight context unavailable');
-    const size=renderSize(canvas.clientWidth,canvas.clientHeight,root.devicePixelRatio,root.innerWidth<768,Math.min(gl.getParameter(gl.MAX_RENDERBUFFER_SIZE),gl.getParameter(gl.MAX_TEXTURE_SIZE)));
+    const size=renderSize(canvas.clientWidth,canvas.clientHeight,root.devicePixelRatio,root.innerWidth<768,maxSize);
     if(size.width!==width||size.height!==height){width=size.width;height=size.height;canvas.width=width;canvas.height=height;}
   }
   function drawOne(model,viewProj,camera,alpha,intensity,time,refl,floorY){

@@ -13,7 +13,7 @@
     document.querySelector('#motion-toggle').hidden=true;
   }
   async function start(){
-    if(reduced){await load('assets/js/motion.js');await load('assets/js/videos.js');return;}
+    if(reduced){await load('assets/js/motion.js?v=20261031-scroll-restored');await load('assets/js/videos.js');return;}
     try{
       let response;
       if(typeof DecompressionStream==='function'){
@@ -27,7 +27,7 @@
         response=await fetch('assets/knight.json');if(!response.ok)throw Error('Scene unavailable');window.KNIGHT_MESH_B64=await response.json();
       }
       if(fallback)return;
-      await load('assets/js/scene.js');if(fallback)return;await load('assets/js/motion.js');await load('assets/js/videos.js');
+      await load('assets/js/scene.js?v=20261031-scroll-restored');if(fallback)return;await load('assets/js/motion.js?v=20261031-scroll-restored');await load('assets/js/videos.js');
     }catch(error){readable();console.warn('The animated scene could not load. The readable portfolio remains available.');}
   }
   // A stalled connection must not leave an unresponsive black cover forever.
