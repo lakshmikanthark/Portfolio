@@ -157,6 +157,7 @@
   const contactCopy=$('.contact-copy'),contactComposition=$('.contact-composition');
   const afterCurtains=$$('.after-curtain'),aperture=$('.play-aperture'),playWorld=$('.play-world'),room=$('.experiment-room'),panels=$$('.experiment-panel');
   let w=innerWidth,h=innerHeight,layout=[],measureNeeded=true,smoothedY=scrollY,clock=0,lastTime=0,frame=0,paused=false,current='',artIndex=0,debug={},reducedApplied=false;
+  let serviceStep=0,projectStep=0,roomWidth=0,roomHeight=0;
   // Show the 000–100 loader once per browser tab. Refreshes skip just the
   // number counter; the Knight's formation sequence is still animated.
   // Using sessionStorage instead of localStorage means a fresh tab sees the
@@ -233,7 +234,13 @@
       const content=contactCopy.getBoundingClientRect().height;
       contactComposition.style.setProperty('--contact-extra',(content>minimum?content*.3:0)+'px');
     }
-    layout=sections.map(el=>({id:el.id,top:el.offsetTop,height:el.offsetHeight}));measureNeeded=false;
+    layout=sections.map(el=>({id:el.id,top:el.offsetTop,height:el.offsetHeight}));
+    // Read stable geometry together, before the frame starts writing styles.
+    // Resize, font completion and the main ResizeObserver invalidate this cache.
+    serviceStep=serviceWindow?.clientWidth||w*.5;
+    projectStep=projectCards[0]&&projectCards[1]?projectCards[1].offsetLeft-projectCards[0].offsetLeft:w*(w<768?.92:.8);
+    roomWidth=playWorld?.clientWidth||w;roomHeight=playWorld?.clientHeight||h;
+    measureNeeded=false;
   }
   function resize(){
     measureNeeded=true;w=innerWidth;h=innerHeight;
@@ -347,13 +354,12 @@
     show(intro,introduction.heading.alpha,`translateY(${introduction.heading.y}svh)`);light(introLetters,introduction.heading.lit);
     const services=sample('services',progress('services'),opts),svc=services.cards;
     show(serviceWindow,svc.alpha,`translateX(${svc.enter*18}vw)`);set(serviceWindow,'pointerEvents',svc.alpha>.1?'auto':'none');
-    const serviceWidth=serviceWindow?.clientWidth||w*.5;set(serviceTrack,'transform',`translateX(${-svc.q*serviceWidth}px)`);
+    set(serviceTrack,'transform',`translateX(${-svc.q*serviceStep}px)`);
     const activeService=Math.round(svc.q);serviceCards.forEach((card,i)=>{card.inert=i!==activeService||svc.alpha<.1;show(card,clamp(1-Math.abs(i-svc.q)*.55,.25,1));});
     $$('[data-service-step]').forEach((button,i)=>button.setAttribute('aria-current',String(i===activeService)));
     const work=sample('work',progress('work'),opts),wc=work.cards;
     show(workHeading,work.heading.alpha,`translateY(${work.heading.y}svh) scale(${work.heading.scale})`);light(workLetters,work.heading.lit);
     show(projectWindow,wc.alpha,`translateY(${wc.y}svh)`);set(projectWindow,'pointerEvents',wc.alpha>.1?'auto':'none');
-    const firstProject=projectCards[0],secondProject=projectCards[1],projectStep=firstProject&&secondProject?secondProject.offsetLeft-firstProject.offsetLeft:w*(w<768?.92:.8);
     set(projectTrack,'transform',`translateX(${-wc.q*projectStep}px)`);
     const activeProject=Math.round(wc.q);projectCards.forEach((card,i)=>{card.inert=i!==activeProject||wc.alpha<.1;});
     $$('[data-project-step]').forEach((button,i)=>button.setAttribute('aria-current',String(i===activeProject)));
@@ -371,7 +377,7 @@
     playWorld?.style.setProperty('--room-unit',unit+'px');
     set(room,'transform',`translateZ(${(camera.z-.15)*unit}px) rotateY(${camera.yaw}deg) translateX(${-camera.x*unit}px)`);
     const positions=[[-.65,0,30],[.65,0,-30],[-.30,-.80,0],[.30,-.80,0]];
-    const projections=positions.map(position=>projectCard(camera,position,playWorld?.clientWidth||w,playWorld?.clientHeight||h,unit,w<768?650:1000));
+    const projections=positions.map(position=>projectCard(camera,position,roomWidth,roomHeight,unit,w<768?650:1000));
     const depthOrder=projections.map((p,i)=>({depth:p.depth,i})).sort((a,b)=>a.depth-b.depth);
     panels.forEach((panel,i)=>{const projected=projections[i];set(panel,'transform',`matrix3d(${projected.matrix.join(',')})`);set(panel,'visibility',projected.visible?'visible':'hidden');set(panel,'zIndex',depthOrder.findIndex(p=>p.i===i)+1);show(panel,1);});
     let flame=state.flame;
