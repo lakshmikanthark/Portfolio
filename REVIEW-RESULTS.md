@@ -66,3 +66,7 @@ The original gold knight now has stable root ICO/PNG/Apple-touch URLs and a root
 ## Footer navigation hardening — 5 November 2026
 
 Footer chapter links and Back to top bypass the transition curtain and jump immediately. A regression check reproduces the former dependency on animation completion and passes after the repair. The UI version is footer-nav-20261105. Native mouse clicks from the visible footer verified Work, Freelance, Journey and Archive destinations and an actual résumé download in the updated preview. All 60 JavaScript, 7 site and 6 discovery groups pass. The reported live-browser failure was not independently reproduced; the live domain requires this updated package before the direct-navigation behavior applies.
+
+## Full-desktop footer overlap — 5 November 2026
+
+Reproduced the actual click blocker using a 1920×1080 CSS viewport, scaled only for inspection: elementFromPoint returned the decorative `p.footer-lk` over Work, Freelance, Journey, Archive, Résumé and Email. A native mouse click on Work did not navigate. Decorative footer text now has pointer-events:none and footer-nav has position:relative with z-index:1. Afterward all ten link centers resolved to their anchors. A native Work click changed the destination to #work; Freelance, Journey and Archive navigated correctly and Résumé produced a browser download. All 73 existing automated checks still pass. Original design and animation code remain unchanged. The new stylesheet URL is site.css?v=footer-layer-20261105.

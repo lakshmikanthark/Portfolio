@@ -430,3 +430,7 @@ html:not(.js) .utilities{display:flex}
 .detail-links a,.experiment-links a{min-height:44px;display:inline-flex;align-items:center}
 html.motion-fallback .archive-controls,html:not(.js) .archive-controls{display:none}
 @media(max-width:767px){#immerse-hint[data-section="work"],#immerse-hint[data-section="services"]{bottom:calc(8px + env(safe-area-inset-bottom))}}
+
+/* Decorative footer text must never cover navigation hit targets. */
+.footer-lk,.footer-signature{pointer-events:none}
+.footer-nav{position:relative;z-index:1}

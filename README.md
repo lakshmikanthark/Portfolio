@@ -31,6 +31,8 @@ All eleven portfolio pages and the 404 page use the original gold knight through
 
 ## Footer navigation — 5 November 2026
 
+The full-desktop issue was reproduced at a 1920×1080 CSS viewport: the decorative LK paragraph intercepted clicks intended for the central footer links. Decorative LK/signature text now ignores pointer events and the footer navigation has its own positioned layer. The original layout and typography are unchanged. The stylesheet uses `footer-layer-20261105` to refresh cached CSS. All ten link centers pass browser hit testing, and Work, Freelance, Journey, Archive and the résumé download were verified in that layout.
+
 Footer chapter links and Back to top now navigate immediately, without waiting for the transition curtain. Menu transitions and manual scrolling retain their existing behavior. The UI script uses `footer-nav-20261105` so a cached older controller is refreshed. Résumé remains a native PDF download.
 
 ## Pages and measurement
