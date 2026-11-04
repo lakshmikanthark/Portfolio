@@ -25,6 +25,14 @@ The final audit also repairs missed chapter measurement around consent, page-vie
 
 The review copy uses `noindex,follow` to avoid competing with the main domain. The production ZIP retains indexable metadata on all eleven canonical pages; this is the only deliberate HTML policy difference between the preview and production copy.
 
+## Favicon consistency — 5 November 2026
+
+All eleven portfolio pages and the 404 page use the original gold knight through stable root icon URLs. `/favicon.ico`, 96/32/16px PNGs, the 180px Apple touch icon and `/site.webmanifest` cover search, tabs, bookmarks and home-screen shortcuts. Original image bytes and the animated homepage tab icon are preserved. External platforms decide when to refresh their caches; Google may need days or weeks to recrawl, and display is not guaranteed. After publication, request the homepage in the existing Search Console property.
+
+## Footer navigation — 5 November 2026
+
+Footer chapter links and Back to top now navigate immediately, without waiting for the transition curtain. Menu transitions and manual scrolling retain their existing behavior. The UI script uses `footer-nav-20261105` so a cached older controller is refreshed. Résumé remains a native PDF download.
+
 ## Pages and measurement
 
 The eleven canonical routes are `/`, `/about/`, `/services/`, `/services/business-websites/`, `/services/ai-workflow-automation/`, `/work/maison-solenne/`, `/work/yodha/`, `/work/enquiry-workflow/`, `/notes/`, `/notes/business-website-launch-checklist/` and `/notes/email-drafts-and-enquiries/`. The sitemap, 404 page, crawl policy and verification material are included.
@@ -45,7 +53,7 @@ python3 -B tests/discovery.test.py
 
 The image-dimension discovery check uses Pillow, already installed in the review environment; install it in a separate developer environment when running that optional QA suite. It is not a website hosting dependency.
 
-The current release passes 59 JavaScript checks/groups and twelve Python groups. They cover loading and recovery, navigation, requested card selection, enquiry validation, clipboard recovery, analytics/privacy states, the fictional workflow, metadata/identity, local links/fragments, CSP and preservation of original media and animation code outside the authorized repairs. See `REVIEW-RESULTS.md` for browser coverage and limits.
+The current release passes 60 JavaScript checks/groups and thirteen Python groups. They cover loading and recovery, navigation, requested card selection, enquiry validation, clipboard recovery, analytics/privacy states, the fictional workflow, metadata/identity, local links/fragments, CSP and preservation of original media and animation code outside the authorized repairs. See `REVIEW-RESULTS.md` for browser coverage and limits.
 
 Use HTTP/HTTPS when testing; opening the HTML directly from the filesystem does not reproduce hosting. The cloud browser uses the original poster/2D fallback when WebGL2 is unavailable. Automated behaviour checks do not establish physical-device FPS, full GPU appearance or event receipt in GA4. These require a check on the actual device and receiving property after upload.
 

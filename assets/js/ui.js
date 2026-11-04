@@ -319,7 +319,7 @@
     chapterNavigationBusy=true;
     try{
       for(const dialog of $$('dialog[open]'))await closeDialog(dialog);
-      await navigateToSection(id,target,anchor.classList.contains('skip-link'),!!anchor.closest('#menu,.footer'));
+      await navigateToSection(id,target,anchor.classList.contains('skip-link')||!!anchor.closest('.footer'),!!anchor.closest('#menu'));
       history.replaceState(null,'','#'+id);
       target.tabIndex=-1;target.focus({preventScroll:true});
     }finally{chapterNavigationBusy=false;}

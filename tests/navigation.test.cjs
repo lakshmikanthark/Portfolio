@@ -32,9 +32,9 @@ function navigation({ reduced = false, close = [], distance = 18000 } = {}) {
   context.window = context;
   vm.runInNewContext(source.slice(start, end), context);
   return { fades, jumps, curtain, frames, changes, get focused() { return focused; },
-    click({ skip = false, ctrlKey = false } = {}) {
-      const anchor = { getAttribute: name => name === 'href' ? '#journey' : null,
-        classList: { contains: () => skip }, closest: () => ({}) };
+    click({ skip = false, ctrlKey = false, footer = false, id = 'journey' } = {}) {
+      const anchor = { getAttribute: name => name === 'href' ? '#' + id : null,
+        classList: { contains: () => skip }, closest: selector => selector === '.footer' ? (footer ? {} : null) : ({}) };
       return handler({ target: { closest: () => anchor }, button: 0, ctrlKey, preventDefault() {} });
     },
     async paint() { for (let i = 0; i < 4 && frames.length; i++) { frames.shift()(i * 16); await tick(); } }
@@ -71,6 +71,18 @@ test('An interrupted fade recovers without trapping the page', async () => {
   const h = navigation(); const done = h.click(); await tick(); h.fades[0].reject(Error('Interrupted')); await done;
   assert.equal(h.jumps.length, 1); assert.equal(h.jumps[0].behavior, 'instant');
   assert.equal(h.curtain.style.pointerEvents, 'none');
+});
+
+test('Footer destinations work immediately without waiting for an animation', async () => {
+  for (const id of ['work', 'services', 'journey', 'archive', 'home']) {
+    const h = navigation(); const done = h.click({ footer: true, id }); await tick();
+    assert.equal(h.jumps.length, 1, id + ' must not wait for the curtain');
+    assert.equal(h.fades.length, 0);
+    assert.equal(h.jumps[0].behavior, 'instant');
+    await done;
+    assert.equal(h.changes[0][2], '#' + id);
+    assert.equal(h.focused, true);
+  }
 });
 
 test('Modified clicks retain their native browser behaviour', async () => {

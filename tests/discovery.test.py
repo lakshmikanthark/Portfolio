@@ -19,6 +19,32 @@ HTML = runpy.run_path(str(ROOT / 'tests/site.test.py'))['HTML']
 
 
 class Discovery(unittest.TestCase):
+    def test_original_knight_icons_are_available_on_every_portfolio_page(self):
+        originals = {'favicon.ico': '33d762db7f495fba.ico',
+                     'favicon-96x96.png': '8c61cbbfb759d262.png',
+                     'favicon-32x32.png': 'e335ffbdf93f12e1.png',
+                     'favicon-16x16.png': 'b045955c226ddd73.png',
+                     'apple-touch-icon.png': '6e9ee796923c6e8b.png'}
+        for name, original in originals.items():
+            self.assertEqual((ROOT / name).read_bytes(), (ROOT / 'assets/media' / original).read_bytes())
+            with Image.open(ROOT / name) as image:
+                self.assertEqual(image.width, image.height)
+        robots = RobotFileParser()
+        robots.parse((ROOT / 'robots.txt').read_text().splitlines())
+        for name in originals:
+            self.assertTrue(robots.can_fetch('Googlebot-Image', BASE + name))
+        for path in ROOT.rglob('*.html'):
+            if 'assets' in path.relative_to(ROOT).parts:
+                continue
+            links = [a for tag, a in HTML(path.read_text()).tags if tag == 'link']
+            for name in originals:
+                self.assertEqual(sum(a.get('href') == '/' + name for a in links), 1, str(path))
+            self.assertEqual(sum(a.get('rel') == 'manifest' and a.get('href') == '/site.webmanifest' for a in links), 1)
+        manifest = json.loads((ROOT / 'site.webmanifest').read_text())
+        self.assertEqual(manifest['start_url'], '/')
+        self.assertEqual(manifest['scope'], '/')
+        self.assertEqual(manifest['icons'][0]['src'], '/favicon-96x96.png')
+
     @classmethod
     def setUpClass(cls):
         cls.urls = [n.text for n in ET.parse(ROOT / 'sitemap.xml').iter() if n.tag.endswith('loc')]

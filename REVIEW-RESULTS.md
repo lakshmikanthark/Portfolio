@@ -58,3 +58,11 @@ The review preview is updated without changing its audience. The public GitHub r
 - [MDN: object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/object-fit), accessed 4 November 2026: contain retains the entire image and can letterbox; cover fills a fixed box and can crop.
 - [MDN: inert](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/inert), accessed 4 November 2026: inactive content is excluded from interaction and focus.
 - [MDN: HTMLMediaElement.play](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play), accessed 4 November 2026: playback promises can reject, so the original image fallback and rejection handling are retained.
+
+## Favicon consistency — 5 November 2026
+
+The original gold knight now has stable root ICO/PNG/Apple-touch URLs and a root manifest on all eleven canonical pages and the 404 page. Original pixels and the homepage favicon animation remain unchanged. The 59 JavaScript, 7 site and 6 discovery checks pass. Browser review verified the 96px PNG loads and nested pages declare the same icons. Google search display remains dependent on recrawling and is not guaranteed.
+
+## Footer navigation hardening — 5 November 2026
+
+Footer chapter links and Back to top bypass the transition curtain and jump immediately. A regression check reproduces the former dependency on animation completion and passes after the repair. The UI version is footer-nav-20261105. Native mouse clicks from the visible footer verified Work, Freelance, Journey and Archive destinations and an actual résumé download in the updated preview. All 60 JavaScript, 7 site and 6 discovery groups pass. The reported live-browser failure was not independently reproduced; the live domain requires this updated package before the direct-navigation behavior applies.
