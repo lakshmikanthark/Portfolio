@@ -217,7 +217,7 @@ function motionHarness(before = false) {
     addEventListener: (name, callback) => listeners.set(name, callback), dispatchEvent() {},
     requestAnimationFrame: callback => { frames.set(++nextFrame, callback); return nextFrame; },
     cancelAnimationFrame: id => frames.delete(id),
-    LKScene: { render() {}, resize() {} }
+    LKScene: { render() {}, resize() {}, inspect: () => ({}) }
   };
   context.window = context;
   vm.runInNewContext(read('assets/js/motion.js', before), context);
@@ -240,6 +240,12 @@ function motionHarness(before = false) {
   reads = 0;
   const resized = frame(1008);
   assert.ok(reads > 0, 'Resize must refresh cached geometry');
+  if (!before) {
+    context.LKSmoothScroll = { scrollTo({ top }) { context.scrollY = top; } };
+    context.LKMotion.goTo('journey', 'instant');
+    frame(1024);
+    assert.equal(context.LKMotion.inspect().section, 'journey', 'Covered navigation must synchronize the scene before the reveal');
+  }
   return { steadyReads, snapshots, resized };
 }
 

@@ -285,17 +285,44 @@
   });
   $('#menu-toggle').addEventListener('click', e => openDialog($('#menu'),e.currentTarget));
   $('#privacy-toggle').addEventListener('click',e=>openDialog($('#privacy-dialog'),e.currentTarget));
+  let chapterNavigationBusy=false;
+  async function navigateToSection(id,target,direct,fromNavigation){
+    const curtain=$('#chapter-transition');
+    const jump=behavior=>{
+      if(window.LKMotion?.goTo)window.LKMotion.goTo(id,behavior);
+      else if(window.LKSmoothScroll)window.LKSmoothScroll.scrollTo({top:target.offsetTop,behavior});
+      else window.scrollTo({top:target.offsetTop,behavior});
+    };
+    const distant=fromNavigation||Math.abs(target.offsetTop-window.scrollY)>innerHeight*1.5;
+    if(direct||reduced.matches||!distant||!curtain?.animate){jump(direct||reduced.matches?'instant':'smooth');return;}
+    window.LKSmoothScroll?.cancel();
+    let fadeOut,fadeIn;
+    curtain.style.pointerEvents='auto';
+    try{
+      fadeOut=curtain.animate([{opacity:0},{opacity:1}],{duration:260,easing:'ease-in-out',fill:'forwards'});
+      await fadeOut.finished;
+      jump('instant');
+      await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+      fadeIn=curtain.animate([{opacity:1},{opacity:0}],{duration:460,easing:'cubic-bezier(.22,1,.36,1)',fill:'forwards'});
+      await fadeIn.finished;
+    }catch{jump('instant');}
+    finally{fadeOut?.cancel();fadeIn?.cancel();curtain.style.opacity='0';curtain.style.pointerEvents='none';}
+  }
   document.addEventListener('click',async e=>{
+    if(e.defaultPrevented||e.button>0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;
     const anchor=e.target.closest('a[href^="#"]');
-    if(!anchor)return;
+    if(!anchor||anchor.getAttribute('target')==='_blank')return;
     const id=anchor.getAttribute('href').slice(1),target=document.getElementById(id);
     if(!target)return;
     e.preventDefault();
-    for(const dialog of $$('dialog[open]'))await closeDialog(dialog);
-    if(window.LKMotion?.goTo)window.LKMotion.goTo(id);
-    else if(window.LKSmoothScroll)window.LKSmoothScroll.scrollTo({top:target.offsetTop,behavior:reduced.matches?'instant':'smooth'});else window.scrollTo({top:target.offsetTop,behavior:reduced.matches?'instant':'smooth'});
-    history.replaceState(null,'','#'+id);
-    if(anchor.classList.contains('skip-link')){target.tabIndex=-1;target.focus({preventScroll:true});}
+    if(chapterNavigationBusy)return;
+    chapterNavigationBusy=true;
+    try{
+      for(const dialog of $$('dialog[open]'))await closeDialog(dialog);
+      await navigateToSection(id,target,anchor.classList.contains('skip-link'),!!anchor.closest('#menu,.footer'));
+      history.replaceState(null,'','#'+id);
+      target.tabIndex=-1;target.focus({preventScroll:true});
+    }finally{chapterNavigationBusy=false;}
   });
   $$('[data-details]').forEach(button=>button.addEventListener('click',()=>{
     const project=data.projects.find(p=>p.id===button.dataset.details);if(!project)return;$('#details-dialog').dataset.projectId=project.id;
@@ -324,14 +351,27 @@
     link.href=data.profile.resume;
     link.download='Lakshmikantha-R-K-Resume.pdf';
   });
+  $('#enquiry-panel').hidden=true;
+  $('#enquiry-toggle').hidden=false;
   $('#enquiry-toggle').addEventListener('click',()=>{
     const panel=$('#enquiry-panel'),button=$('#enquiry-toggle');
     panel.hidden=!panel.hidden;
     button.setAttribute('aria-expanded',String(!panel.hidden));
     if(!panel.hidden)$('#enquiry-form').elements.name.focus({preventScroll:true});
   });
+  const enquiryForm = $('#enquiry-form');
+  function validateEnquiry(){
+    for(const key of ['name','message']){
+      const field=enquiryForm.elements[key];
+      field.setCustomValidity(field.value.trim().length<field.minLength
+        ? (key==='name'?'Please enter your name (at least two characters).':'Please describe your enquiry in at least ten characters.') : '');
+    }
+    return enquiryForm.reportValidity();
+  }
+  enquiryForm.addEventListener('input',event=>event.target.setCustomValidity?.(''));
+  $('#copy-enquiry').hidden=false;
   function enquiryDraft(){
-    const form=$('#enquiry-form'),fields=Object.fromEntries(new FormData(form));
+    const form=enquiryForm,fields=Object.fromEntries(new FormData(form));
     const reason=form.elements.reason.selectedOptions[0].textContent;
     const service=form.elements.service.selectedOptions[0].textContent;
     const subject=reason+(fields.service?' — '+service:'')+' | '+fields.name.trim();
@@ -342,7 +382,7 @@
   }
   $('#enquiry-form').addEventListener('submit',e=>{
     e.preventDefault();
-    if(!e.currentTarget.reportValidity())return;
+    if(!validateEnquiry())return;
     const status=$('#form-status');
     status.dataset.state='draft';
     status.textContent='Review and send the draft in your email app. If nothing opens, copy your enquiry and email '+data.profile.email+'.';
@@ -350,8 +390,8 @@
     window.location.href=enquiryDraft().url;
   });
   $('#copy-enquiry').addEventListener('click',async()=>{
-    const form=$('#enquiry-form'),status=$('#form-status');
-    if(!form.reportValidity())return;
+    const status=$('#form-status');
+    if(!validateEnquiry())return;
     try{
       await navigator.clipboard.writeText(enquiryDraft().body);
       status.dataset.state='copied';

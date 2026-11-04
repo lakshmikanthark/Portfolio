@@ -1,7 +1,7 @@
 /* Only controlled event labels are measured. Never send form entries or mailto URLs. */
 (() => {
   const config=window.LK_SETTINGS||{},id=config.ga4MeasurementId;
-  const configured=/^G-[A-Z0-9]+$/.test(id||'')&&location.protocol==='https:';
+  const configured=/^G-[A-Z0-9]+$/.test(id||'')&&location.protocol==='https:'&&['lakshmikantha.in','www.lakshmikantha.in'].includes(location.hostname);
   const blocked=navigator.doNotTrack==='1'||navigator.globalPrivacyControl===true;
   let active=false,choice=null,script=null,vitalsStarted=false,initialized=false;
   try{choice=localStorage.getItem('lk-analytics-choice');}catch{}
@@ -19,16 +19,25 @@
   }
   function load(){
     if(active||!configured||blocked)return;
-    active=true;window['ga-disable-'+id]=false;if(initialized)return;initialized=true;window.dataLayer=window.dataLayer||[];
+    active=true;window['ga-disable-'+id]=false;
+    if(initialized){gtag('consent','update',{analytics_storage:'granted'});return;}
+    initialized=true;window.dataLayer=window.dataLayer||[];
     window.gtag=function(){dataLayer.push(arguments);};
+    gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});
+    gtag('consent','update',{analytics_storage:'granted'});
     gtag('js',new Date());
     gtag('config',id,{send_page_view:true,allow_google_signals:false,allow_ad_personalization_signals:false,
       page_location:location.origin+location.pathname,page_referrer:document.referrer?new URL(document.referrer).origin:''});
     script=document.createElement('script');script.async=true;script.src='https://www.googletagmanager.com/gtag/js?id='+id;document.head.append(script);
-    if(!vitalsStarted&&window.webVitals){
+    if(!vitalsStarted){
       vitalsStarted=true;
-      const report=metric=>track('web_vital',{metric_name:metric.name,metric_value:metric.name==='CLS'?Math.round(metric.value*1000)/1000:Math.round(metric.value),metric_rating:metric.rating});
-      webVitals.onLCP(report);webVitals.onCLS(report);webVitals.onINP(report);
+      const vitals=document.createElement('script');
+      vitals.src='/assets/js/web-vitals.js';
+      vitals.onload=()=>{
+        const report=metric=>track('web_vital',{metric_name:metric.name,metric_value:metric.name==='CLS'?Math.round(metric.value*1000)/1000:Math.round(metric.value),metric_rating:metric.rating});
+        webVitals.onLCP(report);webVitals.onCLS(report);webVitals.onINP(report);
+      };
+      document.head.append(vitals);
     }
   }
   function select(value){
@@ -37,8 +46,9 @@
     if(value==='allow')load();
     else if(active){
       window['ga-disable-'+id]=true;active=false;script?.remove();
+      gtag('consent','update',{analytics_storage:'denied'});
       // Remove first-party GA cookies for this host and parent domain after withdrawal.
-      const domains=['',location.hostname,'.'+location.hostname];
+      const domains=['',location.hostname,'.'+location.hostname,'.lakshmikantha.in'];
       for(const cookie of document.cookie.split(';')){
         const name=cookie.split('=')[0].trim();if(!name.startsWith('_ga'))continue;
         for(const domain of domains)document.cookie=name+'=; Max-Age=0; path=/'+(domain?'; domain='+domain:'');
@@ -48,14 +58,14 @@
   document.querySelectorAll('[data-analytics-choice]').forEach(button=>button.addEventListener('click',()=>select(button.dataset.analyticsChoice)));
   document.querySelector('#analytics-preferences').addEventListener('click',()=>{
     if(!configured||blocked){window.LKUI?.toast(blocked?'Analytics is disabled by your browser privacy preference.':'Visitor analytics has not been connected yet.');return;}
-    document.querySelector('#privacy-dialog').close();
+    document.querySelector('#privacy-dialog')?.close();
     panel.hidden=false;requestAnimationFrame(()=>panel.querySelector('button').focus({preventScroll:true}));
   });
   if(configured&&!blocked){if(choice==='allow')load();else if(choice!=='decline')panel.hidden=false;}
   document.addEventListener('click',event=>{
-    const target=event.target.closest('a,button');if(!target)return;
+    const target=event.target.closest('a,button,#motion-toggle');if(!target)return;
     if(target.matches('[data-event="resume_download"]'))track('resume_click',{placement:target.closest('#menu')?'menu':target.closest('.footer')?'footer':'page'});
-    else if(target.id==='motion-toggle')track('motion_toggle',{placement:target.getAttribute('aria-pressed')==='true'?'paused':'playing'});
+    else if(target.id==='motion-toggle')track('motion_toggle',{placement:target.checked?'paused':'playing'});
     else if(target.matches('[data-enquire]'))track('quote_click',{service:target.dataset.enquire});
     else if(target.matches('a[href^="mailto:"]'))track('contact_click',{placement:target.closest('#menu')?'menu':'page'});
     else if(target.closest('.project-actions,.detail-links,.experiment-panel')){

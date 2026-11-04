@@ -150,7 +150,7 @@
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   const ids=['home','introduction','eye','services','work','journey','archive-entry','archive','archive-exit','afterhours','black-pause','finale','contact','footer'];
   const sections=ids.map($).filter(Boolean),byId=new Map(sections.map(el=>[el.id,el]));
-  const opening=$('opening'),number=$('load-count'),embers=$('embers'),ec=embers?.getContext('2d'),flames=$('flames'),flamePanel=$('.flame-red-panel'),flameTopFrame=$('.flame-edge-frame-top'),flameBottomFrame=$('.flame-edge-frame-bottom');
+  const opening=$('opening'),flames=$('flames'),flamePanel=$('.flame-red-panel'),flameTopFrame=$('.flame-edge-frame-top'),flameBottomFrame=$('.flame-edge-frame-bottom');
   const hero=$('hero-title'),heroHeader=$('.header'),heroUtilities=$('.utilities'),intro=$('intro-heading'),workHeading=$('.work-heading'),workTitle=$('work-heading'),projectWindow=$('.project-window');
   const serviceWindow=$('.services-window'),serviceTrack=$('services-track'),serviceCards=$$('.service-card'),projectTrack=$('project-track'),projectCards=$$('.project-card');
   const archiveHeading=$('archive-heading'),ring=$('.ring-stage'),artCards=$$('.art-piece'),archiveBottom=$('.archive-bottom');
@@ -158,10 +158,6 @@
   const afterCurtains=$$('.after-curtain'),aperture=$('.play-aperture'),playWorld=$('.play-world'),room=$('.experiment-room'),panels=$$('.experiment-panel');
   let w=innerWidth,h=innerHeight,layout=[],measureNeeded=true,smoothedY=scrollY,clock=0,lastTime=0,frame=0,paused=false,current='',artIndex=0,debug={},reducedApplied=false;
   let serviceStep=0,projectStep=0,roomWidth=0,roomHeight=0;
-  // Show the 000–100 loader once per browser tab. Refreshes skip just the
-  // number counter; the Knight's formation sequence is still animated.
-  // Using sessionStorage instead of localStorage means a fresh tab sees the
-  // introduction again, without forcing repeat visitors to wait on refresh.
   const immerse=$('immerse-hint');
   let lastScrollActivity=performance.now(),lastHintSection='';
   function hideImmerse(){immerse?.classList.remove('is-visible');}
@@ -181,30 +177,19 @@
     const animated=['home','introduction','eye','services','work','archive','afterhours','finale'].includes(section);
     const noScene=state.phase==='black'||state.phase==='contact-pose'||state.flame.coverage>.001;
     immerse.classList.toggle('is-suppressed',!animated||noScene||dialogOpen);
-    const openingReady=section!=='home'||clock-completedClock>=5000;
+    const openingReady=section!=='home'||clock-completedClock>=800;
     const visible=animated&&openingReady&&!noScene&&!dialogOpen&&openingDone&&!openingRevealPending&&!reduce.matches
-      &&!root.LKSmoothScroll?.scrolling&&time-lastScrollActivity>=2000;
+      &&!root.LKSmoothScroll?.scrolling&&time-lastScrollActivity>=650;
     immerse.classList.toggle('is-visible',visible);
   }
 
-  const loaderKey='lk-number-loader-seen-v1';
-  let loaderSeen=false;
-  // Each new load starts animated; a stale saved pause must not freeze the hero.
-  try{loaderSeen=sessionStorage.getItem(loaderKey)==='true';}catch{
-    // Some file:// preview browsers block storage. Fall back to reload type.
-    loaderSeen=performance.getEntriesByType?.('navigation')?.[0]?.type==='reload';
-  }
-  const openingStart=performance.now();let openingDone=!opening||reduce.matches||!!location.hash||loaderSeen,openingRevealPending=openingDone&&!!opening,completedClock=paused?-10000:0;
-  // Skipping the counter still needs the black first-frame guard. In an
-  // offline export the large inline bundle may take time to parse on phones.
+  // Loading handoff: the asset loader owns the numbers and readiness.
+  let openingDone=!opening||!root.LKLoading,openingRevealPending=openingDone&&!!opening,completedClock=paused?-10000:0;
   if(opening)doc.style.overflow='hidden';
   function endOpening(){
-    if(openingDone)return;
+    if(openingDone||(root.LKLoading&&!root.LKLoading.presented))return;
     openingDone=true;completedClock=clock-(paused?10000:0);
-    try{sessionStorage.setItem(loaderKey,'true');}catch{}
-    // Keep the solid-black loader above the page until the very first
-    // particle-scene frame has been drawn. Hiding it here exposes the stale
-    // poster/renderer before the formation state is submitted on the next RAF.
+    // Keep the cover until the first original particle-scene frame is drawn.
     openingRevealPending=true;
   }
   function revealOpening(){
@@ -244,18 +229,9 @@
   }
   function resize(){
     measureNeeded=true;w=innerWidth;h=innerHeight;
-    if(embers&&ec){const d=Math.min(devicePixelRatio||1,1.5);embers.width=Math.round(w*d);embers.height=Math.round(h*d);ec.setTransform(d,0,0,d,0,0);}
     root.LKScene?.resize();
   }
   const progress=id=>{const el=layout.find(item=>item.id===id);return el?clamp((smoothedY-el.top)/Math.max(1,el.height-h)):0;};
-  function emberFrame(time,alpha){
-    if(!ec)return;ec.clearRect(0,0,w,h);
-    for(let i=0;i<(w<768?44:76);i++){
-      const life=(time*.00011*(.4+hash(i+5))+hash(i+77))%1;
-      const y=h*1.08-life*h*1.3,x=w*hash(i+17)+Math.sin(life*7+hash(i+18)*9)*25,size=.4+Math.pow(hash(i+24),6)*2.8;
-      ec.globalAlpha=alpha*Math.sin(life*Math.PI)*(.3+hash(i+38)*.5);ec.fillStyle=i%7===0?'#fbd69a':'#d29543';ec.fillRect(x,y,size,size*1.7);
-    }ec.globalAlpha=1;
-  }
   function flameFrame(state,time){
     if(!flames||!flamePanel||!flameTopFrame||!flameBottomFrame)return;
     const coverage=clamp(state.coverage);
@@ -312,6 +288,7 @@
     const el=byId.get(id);if(!el)return;endOpening();
     const stops={introduction:.24,services:holdStop(0,3,.26,.74),work:holdStop(0,4,.40,.94),archive:.39,afterhours:.20},p=reduce.matches?0:(stops[id]||0);
     const destination=el.offsetTop+p*Math.max(0,el.offsetHeight-innerHeight);if(root.LKSmoothScroll)root.LKSmoothScroll.scrollTo({top:destination,behavior:reduce.matches?'instant':behavior});else root.scrollTo({top:destination,behavior:reduce.matches?'instant':behavior});
+    if(behavior==='instant'||reduce.matches)smoothedY=scrollY;
   }
   function resetReduced(){
     for(const el of [hero,intro,workHeading,projectWindow,serviceWindow,archiveHeading,ring,archiveBottom,room,aperture,contactCopy,...afterCurtains])if(el){el.style.opacity='';el.style.transform='';el.style.pointerEvents='';}
@@ -328,9 +305,7 @@
     const elapsedFrame=lastTime?Math.max(0,time-lastTime):16,dt=Math.min(80,elapsedFrame);lastTime=time;if(!paused)clock+=elapsedFrame;
     if(measureNeeded)measure();
     if(!openingDone){
-      const elapsed=time-openingStart;if(number)number.textContent=String(Math.min(100,Math.floor(elapsed/2400*100))).padStart(3,'0');
-      opening?.classList.toggle('fade-text',elapsed>=2400);emberFrame(clock,1-range(elapsed,2450,2750));
-      if(elapsed>=3000)endOpening();frame=requestAnimationFrame(update);return;
+      frame=requestAnimationFrame(update);return;
     }
     // Keep scene choreography close to the already-smoothed page position instead of adding a second heavy delay.
     smoothedY=damp(smoothedY,scrollY,dt,root.LKSmoothScroll?.enabled?34:(w<768?78:95));

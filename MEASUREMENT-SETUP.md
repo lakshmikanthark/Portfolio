@@ -1,10 +1,10 @@
 # Learn analytics on your own portfolio
 
-Use Google Search Console to understand discovery in Google. Use Google Analytics 4 (GA4) to understand what visitors do. Keep these accounts under your own control. The website currently has no connected GA4 property and collects no Google Analytics data.
+Use Google Search Console to understand discovery in Google. Use Google Analytics 4 (GA4) to understand what visitors do. Keep these accounts under your own control. The owner supplied GA4 Measurement ID `G-WLY0TDLXQG`. This build is configured to use it after visitor consent; receipt in the Analytics property has not been independently verified.
 
 ## Release scope: measurement is separate from publication
 
-The homepage already contains optional consent-controlled GA4 code, but `ga4MeasurementId` is blank. It currently sends no Google Analytics data. The seven new supporting pages load no analytics scripts. Adding a homepage ID will not instrument those pages automatically; their implementation and privacy wording must be updated together if measurement is later added.
+All eleven canonical pages share `assets/js/settings.js` and the consent-controlled analytics integration. Google tracking loads only over HTTPS on `lakshmikantha.in` or `www.lakshmikantha.in`; local and Sites preview visits are excluded. The consent choice persists across pages. The homepage offers Privacy → Analytics preferences; supporting pages offer Analytics preferences in the footer. Declining prevents Google downloads, and withdrawal disables measurement and removes GA cookies. Browser Do Not Track and Global Privacy Control also prevent tracking. Advertising storage, user data and personalization remain denied. The 404 page and embedded standalone project demos are outside this canonical-page measurement scope.
 
 The website can launch without analytics. Use Search Console and a private enquiry ledger first. Never invent a Measurement ID, treat an email-draft open as a completed lead, or announce working analytics before the receiving property has been checked.
 
@@ -15,25 +15,29 @@ The website can launch without analytics. Use Search Console and a private enqui
 3. Check the existing ownership-verification method and preserve it. If verification is actually required and Google offers HTML-file verification, publish the exact file it provides at the website root and keep it there.
 4. Alternatively, choose a Domain property and follow Google's DNS TXT verification instructions if you control the domain's DNS. Never remove unrelated DNS records.
 5. After the new portfolio is published, submit `https://lakshmikantha.in/sitemap.xml` under Sitemaps.
-6. Inspect the eight canonical routes in sitemap.xml. Compare indexed state and live testing; request indexing when appropriate. An accepted request does not establish indexing, and repeated requests do not advance the queue.
+6. Inspect the eleven canonical routes in sitemap.xml. Compare indexed state and live testing; request indexing when appropriate. An accepted request does not establish indexing, and repeated requests do not advance the queue.
 7. Check the Performance report for impressions, clicks and queries containing your name. These reports take time to accumulate data. Site changes do not guarantee indexing or a particular rank.
 
 Your LinkedIn already links to the portfolio. Keep the same full name and website link on your professional profiles, résumé and GitHub profile. No new social accounts are needed for this launch.
 
-## 2. Create your GA4 property
+## Search and AI discovery checks after publishing
 
-1. Open https://analytics.google.com/ and create an Analytics account if needed.
-2. Create a property named `LK Portfolio`. Set the reporting timezone to India.
-3. Add a Web data stream for `https://lakshmikantha.in/`.
-4. Copy its Measurement ID, which begins with `G-`.
-5. In the website package, edit only `assets/js/settings.js` and set `ga4MeasurementId` to that ID. Keep the surrounding quotes. The public Measurement ID is not a password or a private API key.
-6. Publish the updated settings file with the website. The consent prompt appears only when a valid ID has been configured, and Google Analytics loads only after the visitor allows it. Browser Do Not Track and Global Privacy Control preferences disable this integration.
-7. In the Web stream's Enhanced measurement settings, keep page views and disable automatic form interactions, outbound clicks, file downloads and history-based page changes for this portfolio. The site has controlled custom events, and a draft is not a completed lead. Automatic form tracking must not be used to claim enquiries were received.
-8. Open the actual live website, allow analytics, and test a résumé click, a project details button and a service quote link.
-9. Inspect your own property's Realtime report. Use DebugView/Tag Assistant when needed. A script loading is not proof that your property received an event. Do not announce analytics as working until you can see the expected events there.
-10. Return to Privacy → Analytics preferences to test declining and allowing analytics again.
+- In the existing Google Search Console property, inspect Settings → Search generative AI. Keep the site included and check any inherited parent-property choice. The dedicated Generative AI performance report may need sufficient impressions before it is visible.
+- Reuse or verify Bing Webmaster Tools, submit the canonical sitemap, inspect the important pages and check its AI Performance report. Citations are not ranking positions.
+- This release includes a public IndexNow ownership file. Notify participating engines only after the matching pages and that file are live, and record the response separately from actual indexing.
+- The robots policy already permits public search crawlers. Crawl permission, indexing, citations and qualified enquiries are separate states.
 
-No GA4 Measurement ID or receiving-property access has been supplied. Signed-in Search Console state has not been independently inspected in this session. Preserve the owner’s existing verification method; add a new token only if the actual property requires it.
+## 2. Activate and verify the supplied GA4 tag
+
+1. The supplied ID `G-WLY0TDLXQG` is already in `assets/js/settings.js`. Do not paste an additional copy of the Google snippet into the HTML; that would bypass the consent controls or duplicate page views.
+2. Upload the updated package contents to the existing Portfolio repository, preserving folders. Wait for the Pages deployment to finish, then open `https://lakshmikantha.in/`.
+3. Choose **Allow analytics**. No Google requests are made before consent, after an initial decline, on preview/local hosts, or when the browser's Do Not Track/Global Privacy Control preference blocks this integration.
+4. In your existing Analytics Web stream, confirm the ID is `G-WLY0TDLXQG` and the site URL is `https://lakshmikantha.in/`. Keep the reporting timezone set to India if that is the timezone you want in reports. No property settings have been changed in this session.
+5. In the Web stream's Enhanced measurement settings, keep page views and disable automatic form interactions, outbound clicks, file downloads and history-based page changes for this portfolio. Controlled custom events are already implemented; an email draft is not a received enquiry.
+6. Open **Reports → Realtime** in that property, then visit the homepage, About and a service page, and try a résumé link or project details button. Google Tag Assistant can also verify tag and event delivery. A script or a queued event alone does not prove that the receiving property recorded it.
+7. Test declining or withdrawing through **Analytics preferences**. Use a fresh private browser session for the initial-consent check; an earlier allowed choice is remembered. Advertising consent remains denied even when visitor analytics is allowed.
+
+The measurement ID is configured and the code/consent tests pass. The actual domain has not been updated by this review build, and signed-in Analytics/Realtime or Search Console state has not been inspected. Preserve existing ownership verification. Google Analytics measures visits and interactions; it does not establish indexing, rankings or AI citations.
 
 ## 3. What the events mean
 
@@ -78,7 +82,9 @@ Let each client own their Analytics and Search Console properties and grant you 
 - SEO basics: https://developers.google.com/search/docs/fundamentals/seo-starter-guide
 - Ownership verification: https://support.google.com/webmasters/answer/9008080
 - GA4 events: https://developers.google.com/analytics/devguides/collection/ga4/events
+- Consent controls: https://developers.google.com/tag-platform/security/guides/consent
+- Verify the Google tag: https://support.google.com/analytics/answer/15756111
 - Enhanced measurement: https://support.google.com/analytics/answer/9216061
 - Web Vitals: https://web.dev/articles/vitals
 
-References checked for this review on 29 October 2026. Google interface labels may change; follow the instructions shown in your own property.
+Tag installation and consent references checked on 4 November 2026. Google interface labels may change; follow the instructions shown in your own property.

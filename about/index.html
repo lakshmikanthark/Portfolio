@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action mailto:; frame-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self'; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action mailto:; frame-src 'none'">
   <meta name="theme-color" content="#000000">
   <title>About Lakshmikantha R K | Bengaluru, Websites &amp; AI</title>
   <meta name="description" content="Meet Lakshmikantha R K, based in Bengaluru. Read about his background in business operations, websites and AI workflows, and explore his projects.">
@@ -27,49 +27,87 @@
   <meta name="twitter:image" content="https://lakshmikantha.in/assets/share.png?v=identity-20261029">
   <meta name="twitter:image:alt" content="Lakshmikantha R K portfolio cover in black and gold.">
   <link rel="icon" href="../assets/media/33d762db7f495fba.ico?v=identity-20261029" sizes="any">
-  <link rel="stylesheet" href="../assets/css/about.css">
+  <link rel="stylesheet" href="../assets/css/about.css?v=ga4-20261104">
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "ProfilePage",
-        "@id": "https://lakshmikantha.in/about/#profile",
-        "url": "https://lakshmikantha.in/about/",
-        "name": "About Lakshmikantha R K",
-        "description": "Background, selected projects and official profiles of Lakshmikantha R K, based in Bengaluru and working across business operations, websites and AI workflows.",
-        "inLanguage": "en-IN",
-        "isPartOf": {"@id": "https://lakshmikantha.in/#website"},
-        "mainEntity": {"@id": "https://lakshmikantha.in/#person"}
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ProfilePage",
+      "@id": "https://lakshmikantha.in/about/#profile",
+      "url": "https://lakshmikantha.in/about/",
+      "name": "About Lakshmikantha R K",
+      "description": "Background, selected projects and official profiles of Lakshmikantha R K, based in Bengaluru and working across business operations, websites and AI workflows.",
+      "inLanguage": "en-IN",
+      "isPartOf": {
+        "@id": "https://lakshmikantha.in/#website"
       },
-      {
-        "@type": "Person",
-        "@id": "https://lakshmikantha.in/#person",
-        "name": "Lakshmikantha R K",
-        "alternateName": ["LK", "Lakshmikantha RK"],
-        "url": "https://lakshmikantha.in/",
-        "description": "Based in Bengaluru, working across business operations, websites and AI workflows. Open to Business Analyst and Business Operations roles and freelance projects.",
-        "knowsAbout": ["Business analysis", "Business operations", "Web development", "AI workflows"],
-        "sameAs": ["https://www.linkedin.com/in/lakshmikantha-r-k", "https://github.com/lakshmikanthark"]
+      "mainEntity": {
+        "@id": "https://lakshmikantha.in/#person"
       }
-    ]
-  }
-  </script>
+    },
+    {
+      "@type": "Person",
+      "@id": "https://lakshmikantha.in/#person",
+      "name": "Lakshmikantha R K",
+      "alternateName": [
+        "LK",
+        "Lakshmikantha RK",
+        "LKRK"
+      ],
+      "url": "https://lakshmikantha.in/",
+      "description": "Lakshmikantha R K, also known as LK and LKRK, is based in Bengaluru and works across business operations, websites and practical AI workflows. Open to Business Analyst and Business Operations roles and freelance projects.",
+      "knowsAbout": [
+        "Business analysis",
+        "Business operations",
+        "Web development",
+        "AI workflows"
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/in/lakshmikantha-r-k",
+        "https://github.com/lakshmikanthark"
+      ],
+      "mainEntityOfPage": {
+        "@id": "https://lakshmikantha.in/about/#profile"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://lakshmikantha.in/about/#breadcrumbs",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Portfolio",
+          "item": "https://lakshmikantha.in/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About LK",
+          "item": "https://lakshmikantha.in/about/"
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <a class="wordmark" href="../" aria-label="Lakshmikantha R K portfolio home">LK<span>.</span></a>
-    <nav aria-label="Primary"><a href="../#work">Work</a><a href="../services/business-websites/">Websites</a><a href="#contact">Get in touch</a></nav>
+    <nav aria-label="Primary"><a href="../about/">About</a><a href="../services/">For businesses</a><a href="#contact">Contact</a></nav>
   </header>
   <main id="main" tabindex="-1">
+  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Portfolio</a><span aria-current="page">About LK</span></nav>
     <section class="intro" aria-labelledby="about-title">
       <p class="eyebrow">About / Bengaluru, India</p>
       <h1 id="about-title">Lakshmikantha<br> <span>R K.</span></h1>
       <p class="lead">Business operations.<br>Websites.<br>Practical AI workflows.</p>
-      <p class="intro-copy">I’m Lakshmikantha R K, also known as LK. I’m based in Bengaluru, with an Information Science &amp; Engineering background and experience across business operations, digital commerce and AI-assisted website development.</p>
-      <div class="contact-links intro-actions"><a class="button" href="../services/business-websites/">Explore website services</a><a class="button button-secondary" href="../assets/resume.pdf" download="Lakshmikantha-R-K-Resume.pdf">Download résumé</a></div>
-      <p class="scope-note">Open to Business Analyst and Business Operations roles, alongside freelance projects.</p>
+      <p class="intro-copy">I’m Lakshmikantha R K, also known as LK and LKRK. I’m based in Bengaluru, with an Information Science &amp; Engineering background and experience across business operations, digital commerce and AI-assisted website development.</p>
+      <div class="contact-links intro-actions"><a class="button" href="../services/">For businesses</a><a class="button button-secondary" href="../assets/resume.pdf" download="Lakshmikantha-R-K-Resume.pdf" data-event="resume_download">Download résumé</a></div>
+      <p class="scope-note">This is my dual portfolio: freelance work for businesses, alongside experience and projects for career opportunities. Open to Business Analyst and Business Operations roles.</p><a class="inline-link" href="#background-title">Explore experience and résumé</a>
     </section>
 
     <section class="chapter" aria-labelledby="approach-title">
@@ -107,8 +145,8 @@
     <section class="chapter" aria-labelledby="questions-title">
       <p class="eyebrow">04 / A little more context</p>
       <h2 id="questions-title">Before we talk.</h2>
-      <div class="questions">
-        <article><h3>What can I work with you on?</h3><p>Freelance websites, interaction design, AI workflows, and consistent design or content for a business. Share the problem, your current setup and the outcome you want; we can then discuss the scope. <a href="../services/business-websites/">Read about website projects</a>.</p></article>
+      <div class="questions"><article><h3>Who is LK, and which name should I search?</h3><p>LK and LKRK refer to Lakshmikantha R K on this website. Lakshmikantha RK is the same name written without the space before the initials. Similar spellings such as Lakshmikanth or Lakshmi Kanth can refer to other people; use my full name and Bengaluru, or this domain, to identify my work.</p></article>
+        <article><h3>What can I work with you on?</h3><p>Freelance websites, interaction design, AI workflows, and consistent design or content for a business. Share the problem, your current setup and the outcome you want; we can then discuss the scope. <a href="../services/">Explore business solutions</a> or <a href="../services/ai-workflow-automation/">read about practical automation</a>.</p></article>
         <article><h3>Are you open to professional roles?</h3><p>Yes. I’m open to Business Analyst and Business Operations opportunities, alongside relevant freelance projects. My résumé and project work provide more context.</p></article>
         <article><h3>Where can I verify your work?</h3><p>Explore the linked projects and the public repositories on <a href="https://github.com/lakshmikanthark" target="_blank" rel="noopener noreferrer">GitHub</a>. My <a href="https://www.linkedin.com/in/lakshmikantha-r-k" target="_blank" rel="noopener noreferrer">LinkedIn profile</a> provides additional professional context. Concepts and demonstrations are labelled on this page and in the portfolio.</p></article>
       </div>
@@ -120,10 +158,12 @@
       <p class="eyebrow">06 / Your next move</p>
       <h2 id="contact-title">Bring the problem.<br>Let’s find the direction.</h2>
       <p>Tell me what you’re working on, what needs to change and any timing you have in mind.</p>
-      <div class="contact-links"><a class="button" href="mailto:lakshmikanthark20@gmail.com?subject=Project%20enquiry%20from%20your%20About%20page">Discuss a project</a><a class="inline-link" href="../assets/resume.pdf" download="Lakshmikantha-R-K-Resume.pdf">Download résumé</a></div>
+      <div class="contact-links"><a class="button" href="mailto:lakshmikanthark20@gmail.com?subject=Project%20enquiry%20from%20your%20About%20page">Discuss a project</a><a class="inline-link" href="../assets/resume.pdf" download="Lakshmikantha-R-K-Resume.pdf" data-event="resume_download">Download résumé</a></div>
     <div class="email-contact"><div class="email-controls"><a class="email-address" href="mailto:lakshmikanthark20@gmail.com">lakshmikanthark20@gmail.com</a><button class="button button-secondary" type="button" data-copy-email hidden aria-describedby="copy-status">Copy email</button></div><p class="copy-status" id="copy-status" role="status" aria-live="polite"></p></div></section>
   </main>
-  <footer class="site-footer"><a href="../">Return to the portfolio</a><a href="../notes/">Practical notes</a><p>© 2026 Lakshmikantha R K</p><p class="privacy-note">This page uses no analytics or tracking cookies. Email links open your email app; a message is sent only when you send it.</p></footer>
+  <footer class="site-footer"><a href="../">Return to the portfolio</a><a href="../notes/">Practical notes</a><p>© 2026 Lakshmikantha R K</p><p class="privacy-note">Optional Google Analytics measures visits and interactions only if you allow it. Enquiry details are never included. Change your choice with Analytics preferences. Email links open your email app; a message is sent only when you send it.</p><button id="analytics-preferences" class="button button-secondary" type="button" hidden>Analytics preferences</button></footer>
+  <aside id="analytics-choice" class="analytics-choice" hidden aria-label="Optional visitor analytics"><p>Help improve this portfolio?</p><p class="analytics-note">Allow Google Analytics to measure visits and interactions. Your enquiry details are never included.</p><div><button data-analytics-choice="allow" type="button">Allow analytics</button><button data-analytics-choice="decline" type="button">No thanks</button></div></aside>
 <script defer src="../assets/js/contact.js"></script>
+<script defer src="/assets/js/settings.js?v=ga4-20261104"></script>
 </body>
 </html>
