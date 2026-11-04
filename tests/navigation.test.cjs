@@ -84,6 +84,7 @@ function hint({ scrolling = false, reduced = false, dialog = false } = {}) {
   const classes = new Set();
   const context = { immerse: { dataset: {}, classList: { toggle(name, on) { on ? classes.add(name) : classes.delete(name); } } },
     lastHintSection: 'home', lastScrollActivity: 0, clock: 900, completedClock: 0,
+    layout: [{ id: 'footer', top: 10000 }], h: 900, scrollY: 0,
     openingDone: true, openingRevealPending: false,
     reduce: { matches: reduced }, document: { querySelector: () => dialog ? {} : null },
     root: { LKSmoothScroll: { scrolling } }
@@ -94,16 +95,35 @@ function hint({ scrolling = false, reduced = false, dialog = false } = {}) {
   } };
 }
 
-test('Immerse is visible within the first second and returns shortly after scrolling', () => {
-  const h = hint(); h.update(); assert.equal(h.classes.has('is-visible'), true);
-  h.context.lastScrollActivity = 1000; h.update(1660); assert.equal(h.classes.has('is-visible'), true);
+test('Immerse returns after exactly one idle second', () => {
+  const h = hint(); h.update(999); assert.equal(h.classes.has('is-visible'), false);
+  h.update(1000); assert.equal(h.classes.has('is-visible'), true);
+  h.context.lastScrollActivity = 1000; h.update(1999); assert.equal(h.classes.has('is-visible'), false);
+  h.update(2000); assert.equal(h.classes.has('is-visible'), true);
 });
 
-test('The earlier hint still respects scrolling, dialogs, reduced motion and red transitions', () => {
-  for (const options of [{ scrolling: true }, { reduced: true }, { dialog: true }]) {
-    const h = hint(options); h.update(); assert.equal(h.classes.has('is-visible'), false);
+test('Immerse remains available in all thirteen chapters before the footer', () => {
+  for (const section of ['home','introduction','eye','services','work','journey','archive-entry','archive','archive-exit','afterhours','black-pause','finale','contact']) {
+    const h = hint(); h.context.lastHintSection = section;
+    h.update(1500, section, {phase:'black',flame:{coverage:1}});
+    assert.equal(h.classes.has('is-visible'), true, section);
   }
-  const h = hint(); h.update(900, 'home', { phase: 'forming', flame: { coverage: 1 } });
+});
+
+test('Immerse hides as soon as the footer enters the viewport, including the contact boundary', () => {
+  const h = hint(); h.context.lastHintSection = 'contact';
+  h.context.layout = [{ id: 'footer', top: 5000 }];
+  h.context.scrollY = 4099; h.update(1500, 'contact');
+  assert.equal(h.classes.has('is-visible'), true);
+  h.context.scrollY = 4101; h.update(1510, 'contact');
   assert.equal(h.classes.has('is-visible'), false);
-  h.update(1600, 'contact'); assert.equal(h.classes.has('is-visible'), false);
+  h.update(3000, 'footer'); assert.equal(h.classes.has('is-visible'), false);
+});
+
+test('Immerse waits for loading, scrolling and open dialogs', () => {
+  for (const options of [{ scrolling: true }, { dialog: true }]) {
+    const h = hint(options); h.update(1500); assert.equal(h.classes.has('is-visible'), false);
+  }
+  const h = hint(); h.context.openingDone = false; h.update(1500);
+  assert.equal(h.classes.has('is-visible'), false);
 });

@@ -172,14 +172,13 @@
   function updateImmerse(time,section,state){
     if(!immerse)return;
     if(section!==lastHintSection){lastHintSection=section;lastScrollActivity=time;immerse.dataset.section=section;}
-    const dialogOpen=!!document.querySelector('dialog[open]');
+    const dialogOpen=!!document.querySelector('dialog[open], #analytics-choice:not([hidden])');
     if(dialogOpen)lastScrollActivity=time;
-    const animated=['home','introduction','eye','services','work','archive','afterhours','finale'].includes(section);
-    const noScene=state.phase==='black'||state.phase==='contact-pose'||state.flame.coverage>.001;
-    immerse.classList.toggle('is-suppressed',!animated||noScene||dialogOpen);
-    const openingReady=section!=='home'||clock-completedClock>=800;
-    const visible=animated&&openingReady&&!noScene&&!dialogOpen&&openingDone&&!openingRevealPending&&!reduce.matches
-      &&!root.LKSmoothScroll?.scrolling&&time-lastScrollActivity>=650;
+    const footerVisible=section==='footer'||layout.some(item=>item.id==='footer'&&scrollY+h>item.top);
+    immerse.classList.toggle('is-suppressed',dialogOpen||footerVisible);
+    const openingReady=section!=='home'||clock-completedClock>=1000;
+    const visible=openingReady&&!dialogOpen&&!footerVisible&&openingDone&&!openingRevealPending&&!reduce.matches
+      &&!root.LKSmoothScroll?.scrolling&&time-lastScrollActivity>=1000;
     immerse.classList.toggle('is-visible',visible);
   }
 
@@ -278,7 +277,9 @@
     const el=byId.get(id);if(!el)return;
     if(reduce.matches){el.querySelectorAll(id==='services'?'.service-card':'.project-card')[index]?.scrollIntoView({block:'center',behavior:'instant'});return;}
     measure();const item=layout.find(s=>s.id===id),p=id==='services'?holdStop(index,count,.26,.74):holdStop(index,count,.40,.94);
-    const destination=item.top+p*(item.height-h);if(root.LKSmoothScroll)root.LKSmoothScroll.scrollTo({top:destination,behavior:'smooth'});else root.scrollTo({top:destination,behavior:'smooth'});
+    // Explicit selectors land on the requested card before its actions become usable.
+    const destination=item.top+p*(item.height-h);smoothedY=destination;
+    if(root.LKSmoothScroll)root.LKSmoothScroll.scrollTo({top:destination,behavior:'instant'});else root.scrollTo({top:destination,behavior:'instant'});
   }
   function artStep(delta){
     const index=clamp(artIndex+delta,0,artCards.length-1);if(reduce.matches){artIndex=index;artCards[index]?.scrollIntoView({block:'center',behavior:'instant'});return;}

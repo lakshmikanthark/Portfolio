@@ -28,7 +28,7 @@ function loader({ knownSize = true, reduced = false, compression = '' } = {}) {
   const context = {
     window: null, document: { documentElement: html, body,
       fonts: { load: () => fonts.promise },
-      querySelector: selector => ({ '.opening': opening, '#opening': opening, '#load-count': counter, '#embers': canvas, '#motion-toggle': {} })[selector],
+      querySelector: selector => ({ '.opening': opening, '#opening': opening, '#load-count': counter, '#embers': canvas })[selector],
       getElementById: id => ({ opening, 'load-count': counter })[id],
       createElement: () => ({ remove() {} })
     },

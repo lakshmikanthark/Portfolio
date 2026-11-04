@@ -1,53 +1,60 @@
-# Loading and navigation review — 4 November 2026
+# Complete website release review — 4 November 2026
 
-This review copy includes the requested earlier navigation cue, calmer section changes and smooth real-loading display. It is prepared for review before GitHub upload. No live-domain, DNS or indexing change is included.
+This release repairs preview fitting, selection controls and popup access, and restores the requested all-capital headline. It includes the earlier preferences, loading, navigation, Menu and Connect work. The downloadable website is complete, rather than a patch that depends on an older upload.
 
-## Current result
+## Search and measurement audit
 
-- “Immerse” becomes eligible 800 ms after the opening handoff, instead of five seconds, and returns after 650 ms of inactivity. It stays hidden during active scrolling, dialogs, reduced motion, flame covers and the contact pose.
-- Menu/footer section links fade to black over 260 ms, reposition under the cover, synchronize the scene and reveal the destination over 460 ms. Other distant hash links use the same transition. They no longer race through intervening scenes. Original wheel/touch scrolling remains unchanged.
-- The destination receives keyboard focus without an extra scroll. Repeated navigation clicks cannot overlap transitions. Interrupted fades release the cover. Reduced motion and keyboard skip links navigate immediately; modified clicks retain native behaviour.
-- The number measures required startup work: model transfer/parsing, renderer, scene readiness, fonts, motion and preview controller. Its display eases toward measured progress and never exceeds it. A usable Content-Length permits partial model-transfer progress; unknown sizes wait for completion.
-- 100 requires completion of all startup tasks. The original hero handoff then waits for 100 to be painted. Reduced-motion mode now also waits for actual completion, fixing an early-cover-dismissal bug. Failure/stall recovery reveals readable content without claiming success.
-- Original amber particles now start in the loader at progress zero. A subtle amber bloom is available from the first HTML/CSS paint. Reduced motion keeps the bloom static and skips particles.
-- The loading-only sentence is “A different perspective is taking shape.” It disappears with the cover.
-- The previously removed hero sentence and business/career buttons remain removed. Both routes remain in the menu and footer.
+See `SEARCH-READINESS.md` for the latest source/HTTP checks. The added regressions reproduce missing post-consent chapter views, failure to revoke after another tab clears preferences, missing project attribution on supporting pages and interrupted page-view loading. The controller now explicitly requests one consented `page_view` per document after the tag loads. All 59 JavaScript checks and twelve Python groups pass. Discovery checks include actual social-image dimensions, canonical/social agreement, resolved schema references, real author/provider IDs, initial-HTML reachability, consent-controller/CSP coverage and sitemap/llms/robots/ownership agreement. Pillow is a developer QA dependency only.
 
-The percentage represents required startup tasks, with partial model transfer contributing to its task. It does not mean that every byte on every linked page is downloaded. Project recordings remain lazy-loaded.
+The live custom domain was checked and still serves the earlier ga4/polish revision. All eleven canonical routes returned 200; HTTP and www resolved to the HTTPS apex; robots, sitemap and ownership returned 200; a missing route returned 404. The complete ZIP and review copy contain the newer repairs. Preview HTML uses noindex while the production ZIP remains indexable. Google’s public consumer test additionally accepted About’s ProfilePage/breadcrumb and the launch checklist’s Article/breadcrumb. The article has one optional missing-image warning. Candidate/live JSON-LD parity was verified across all eleven routes. No account-side analytics or indexing state is implied by those results.
 
-## Preserved behaviour and code scope
+## Reproduced issues and repairs
 
-The original renderer, mesh, textures, fonts, project media, video controller and first wheel/touch easing module are unchanged. Camera paths, hero formation, particle phases, scroll gains and chapter timing remain protected. Normalized source comparisons exclude only authorized enquiry, link-navigation, loading and hint changes. Expected fingerprints were derived from the previously delivered source, rather than resetting protection to arbitrary new code. Exact SVG geometry, colours and paint order remain checked.
+| Issue | Evidence and resulting behaviour |
+| --- | --- |
+| Black gutters around recordings | All eight recordings are 16:10, while the card frames have other proportions. `object-fit: contain` created internal bars. Inline recordings now use cover with a top-centred position. Popups retain natural proportions with automatic width/height and bounded maximum dimensions; a browser check measured a 960×600 recording rendered at 390×243.75. |
+| Selectors pass through unrelated clickable projects | Browser review showed an intermediate project after selecting a later one. Explicit selectors now reposition immediately and synchronize the scene sample. Four new regressions cover all seven selectors, rapid changes, missing smoothing controller and reduced motion. Manual scrolling remains unchanged. |
+| Small popup links and inconvenient closing | Project and experiment links have 44px touch targets. The popup close row stays available while scrolling. Native video controls, Escape and focus return remain supported. |
+| Phone hint crosses the project action row | The 320×568 review exposed the overlap. On phone project/service chapters the cue now occupies the lower centre, below the actions and selector row. It remains noninteractive. |
+| Requested headline style | The initial-capital override was removed. The original uppercase rule again applies to DIRECTION, DETAILS and GROWTH and their animated spans. Menu remains handwritten with a capital M. |
 
-Ember rendering moved from motion to the loader rather than adding a second renderer. The fade uses the browser's Web Animations API. No new production dependency was added. The earlier optional-script reduction and lossless SVG simplification remain; file size alone is not a load-time or FPS measurement.
+## Automated verification
 
-## Regression checks
+- 59 JavaScript checks/groups pass: loading tasks/progress, stall/failure recovery, reduced motion, navigation transitions, repeated and interrupted navigation, idle hints and footer entry, seven card selections and rapid changes, enquiry validation/recovery, clipboard failures, workflow states and optional analytics.
+- Twelve Python groups pass across eleven canonical routes and the 404 page: unique headings/IDs and metadata, consistent identity, JSON and executable-script CSP hashes, local assets/links/fragments, native form access, confirmed biography and project counts, protected source/media and original SVG geometry/paint order.
+- All ten application JavaScript files pass syntax checks; whitespace checks pass.
+- Comparison with the previous accepted source confirms six identical phone/wide touch traces and identical sampled animation styles. Graphics-limit queries remain two over 60 simulated frames; tracked steady-frame layout reads remain zero. The optional comparison test now uses a commit present in this repository rather than an unavailable historical commit. These are simulated counts, not FPS measurements.
 
 ```sh
-node --test tests/animation-performance.test.cjs tests/navigation.test.cjs tests/loading.test.cjs tests/contact-copy.test.cjs tests/enquiry.test.cjs tests/optional-analytics.test.cjs tests/workflow-demo.test.cjs
+node --test tests/*.test.cjs
 python3 -B tests/site.test.py
+python3 -B tests/discovery.test.py
 ```
 
-All 40 reported JavaScript checks/groups and all seven Python groups pass. All ten application JavaScript files pass syntax checks; whitespace validation passes.
+The regression baseline retains 47 protected asset/style/domain/crawl files. Original UI outside the previously authorized enquiry/navigation/utility work remains protected. The new motion exclusion covers only `step()` for the requested selector repair. Before changing its fingerprint, the previous accepted source was verified against the old protected hash and its selector was confirmed identical to the original `c9ff464` source. The renderer, video controller, recordings, mesh, fonts, manual input module and camera/chapter sampling remain unchanged. The floor's 480 polygons retain exact geometry, colours and order. No production dependency was added.
 
-The new navigation/hint suite initially failed six of seven checks against the previous implementation. The three added smooth-loading, initial-amber and handoff checks also failed before their fixes. A separate reduced-motion regression reproduced early dismissal of the cover and now passes.
+## Browser coverage
 
-The fourteen loading checks cover the clean hero, absence of timed fake percentages, partial and unknown-size transfers, pending tasks, failures/stalls, reduced motion, gzip/transparent responses, font failure, bounded display changes, initial particles and both handoff guards. Navigation checks cover covered repositioning, repeated clicks, interruption, focus, modified clicks, reduced motion, skip links and hint timing/suppression. Existing animation, enquiry, clipboard, privacy and workflow checks remain.
+Desktop rendering was checked for all ten supporting pages and the 404 page, with one main heading each, no horizontal overflow and no failed rendered images. All ten supporting pages were also checked in a 320×568 CSS-pixel frame with no horizontal overflow. This is responsive-layout testing in a desktop browser, not a claim of physical phone testing.
 
-Python checks cover eleven canonical routes, metadata/identity, JSON/CSP, local references/fragments, 404 links, confirmed biography, native form fallback, protected files and SVG parity.
+Homepage review covered a 320×568 phone frame, a 667×375 landscape frame and a 390×844 phone frame, plus the full desktop viewport. The four project selectors and all four project-detail dialogs were exercised; their titles and destinations matched. Popup native video controls, natural media proportions, 44px links, close/Escape and focus recovery were inspected. Service selection, gallery controls, responsive hint separation, uppercase presentation and footer suppression were checked in the final browser pass.
 
-## Browser review
+The five linked live destinations—Maison Solenne, SEONY, Yodha, NextMove and Thirty Mornings—loaded successfully, as did their five public repositories and the Council Lens repository. This establishes working portfolio destinations; it does not certify every feature of those separate applications. The local Briefspindle demonstration remains an original, labelled product demo; full software and paid access are still in development.
 
-Desktop review verified the clean hero and visible Immerse cue, menu Work/Contact, footer Journey and Back to top. The destination chapter/hash/focus matched, the menu closed, and the transition cover released pointer input. Phone-sized review at 390 × 844 and 320 × 568 CSS pixels showed no horizontal overflow. All five menu links fit the short viewport; Contact navigation also landed correctly there. Startup DOM inspection showed a real intermediate count and the amber background with the loading sentence inside the viewport.
+On the 320×568 supporting-page layout, Analytics preferences opened within the viewport without internal horizontal overflow, explained that measurement was off in the preview and loaded no Google tag. The fictional enquiry workflow produced a review plan, stopped a missing-contact case and recovered when contact availability was restored. Earlier and automated checks cover mail-draft encoding, whitespace-only input, clipboard denial and correction. No test sent email.
 
-The cloud environment uses the original poster fallback when WebGL2 is unavailable. These checks are not physical-phone FPS measurements or full 3D-rendering proof. The original renderer and visual assets are preserved; full GPU rendering and perceived smoothness still require review on the user's device.
+## Analytics, accessibility and release limits
 
-## GA4 configuration
+The owner-provided `G-WLY0TDLXQG` is configured once across all eleven canonical pages. Production consent, DNT/GPC, download failure/retry, cookie cleanup, revocation, cross-tab changes and excluded enquiry details are covered. Local/preview visits cannot initialize Google tracking. A click on Connect measures intent only after consent; it is not evidence of a delivered message. Receiving-property receipt remains a post-upload check in GA4 Realtime/Tag Assistant.
 
-The owner-supplied ID G-WLY0TDLXQG is configured across all eleven canonical pages. Each page uses the same deferred settings/controller and consent choice; supporting-page privacy text and controls were updated together. Local and Sites preview hosts cannot initialize Google tracking. Google and Web Vitals load only after consent on the HTTPS production host. Consent withdrawal/regrant, duplicate prevention, parent-domain GA-cookie cleanup, controlled event parameters and the motion-checkbox event are covered by tests. Advertising consent remains denied.
+Keyboard focus, visible native popup pointers, readable/static fallback, native email links, semantic landmarks/headings, image alternatives and reduced-motion behaviour were reviewed through source, behaviour checks and representative browser interactions. This is not a formal WCAG certification or a complete assistive-technology/device matrix.
 
-The new tests first detected missing page coverage, relative nested-page script paths, absent consent updates and preview tracking. They pass after the shared integration fixes. Receiving-property event receipt is pending upload and an owner check in Realtime/Tag Assistant; the review build does not establish live-domain collection.
+The cloud browser uses the original poster/2D fallback where WebGL2 is unavailable. No measured Lighthouse, field Core Web Vitals or physical-device FPS score is claimed. Full 3D appearance and sustained animation smoothness need the user's actual GPU/device. The earlier independent-review agent could not run because its usage quota was exhausted; no independent certification is claimed.
 
-## Confirmed identity and business
+The review preview is updated without changing its audience. The public GitHub repository and custom-domain deployment are not modified by preparing this ZIP. After uploading, verify the real-domain routes and receiving analytics property. The original CNAME, crawl policy and ownership material remain included; deployment requires no DNS change.
 
-Lakshmikantha R K; variants LK, Lakshmikantha RK and LKRK. Bengaluru business websites, practical AI workflows and operations support, with career and freelance routes. Email-only contact: lakshmikanthark20@gmail.com. TEA is an independent freelance practice; truthful concept/demo labels remain. Hiland Realty is January–September 2026; Posterwa is 2023–ongoing.
+## Implementation references
+
+- [MDN: object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/object-fit), accessed 4 November 2026: contain retains the entire image and can letterbox; cover fills a fixed box and can crop.
+- [MDN: inert](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/inert), accessed 4 November 2026: inactive content is excluded from interaction and focus.
+- [MDN: HTMLMediaElement.play](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play), accessed 4 November 2026: playback promises can reject, so the original image fallback and rejection handling are retained.

@@ -4,7 +4,7 @@ Use Google Search Console to understand discovery in Google. Use Google Analytic
 
 ## Release scope: measurement is separate from publication
 
-All eleven canonical pages share `assets/js/settings.js` and the consent-controlled analytics integration. Google tracking loads only over HTTPS on `lakshmikantha.in` or `www.lakshmikantha.in`; local and Sites preview visits are excluded. The consent choice persists across pages. The homepage offers Privacy → Analytics preferences; supporting pages offer Analytics preferences in the footer. Declining prevents Google downloads, and withdrawal disables measurement and removes GA cookies. Browser Do Not Track and Global Privacy Control also prevent tracking. Advertising storage, user data and personalization remain denied. The 404 page and embedded standalone project demos are outside this canonical-page measurement scope.
+All eleven canonical pages share `assets/js/settings.js` and the consent-controlled analytics integration. Google tracking loads only over HTTPS on `lakshmikantha.in` or `www.lakshmikantha.in`; local and Sites preview visits are excluded. The consent choice persists across pages, and changes also apply to other open tabs. The homepage offers Privacy → Analytics preferences; supporting pages offer Analytics preferences in the footer. Declining prevents Google downloads, and withdrawal disables measurement and removes GA cookies. Browser Do Not Track and Global Privacy Control also prevent tracking. Preferences still open, identify the exact browser signal and explain how the owner can change their browser setting before reloading. Do not bypass visitor opt-outs. The panel has a close button, Escape recovery and a visible native pointer. A blocked or failed Google script is reported separately from an opt-out, with a manual retry. Advertising storage, user data and personalization remain denied. The 404 page and embedded standalone project demos are outside this canonical-page measurement scope.
 
 The website can launch without analytics. Use Search Console and a private enquiry ledger first. Never invent a Measurement ID, treat an email-draft open as a completed lead, or announce working analytics before the receiving property has been checked.
 
@@ -33,17 +33,32 @@ Your LinkedIn already links to the portfolio. Keep the same full name and websit
 2. Upload the updated package contents to the existing Portfolio repository, preserving folders. Wait for the Pages deployment to finish, then open `https://lakshmikantha.in/`.
 3. Choose **Allow analytics**. No Google requests are made before consent, after an initial decline, on preview/local hosts, or when the browser's Do Not Track/Global Privacy Control preference blocks this integration.
 4. In your existing Analytics Web stream, confirm the ID is `G-WLY0TDLXQG` and the site URL is `https://lakshmikantha.in/`. Keep the reporting timezone set to India if that is the timezone you want in reports. No property settings have been changed in this session.
-5. In the Web stream's Enhanced measurement settings, keep page views and disable automatic form interactions, outbound clicks, file downloads and history-based page changes for this portfolio. Controlled custom events are already implemented; an email draft is not a received enquiry.
+5. In the Web stream's Enhanced measurement settings, use the table below. The shared controller disables the config command's automatic page view, then explicitly requests one `page_view` when the Google script is ready and consent is allowed. Repeated consent changes do not request another view for the same document. History-based page views must stay off: homepage chapter links use `replaceState`, and those chapters have their own `section_view` events. A form submission here prepares an email draft, so automatic `form_submit` is not a received lead.
 6. Open **Reports → Realtime** in that property, then visit the homepage, About and a service page, and try a résumé link or project details button. Google Tag Assistant can also verify tag and event delivery. A script or a queued event alone does not prove that the receiving property recorded it.
 7. Test declining or withdrawing through **Analytics preferences**. Use a fresh private browser session for the initial-consent check; an earlier allowed choice is remembered. Advertising consent remains denied even when visitor analytics is allowed.
 
 The measurement ID is configured and the code/consent tests pass. The actual domain has not been updated by this review build, and signed-in Analytics/Realtime or Search Console state has not been inspected. Preserve existing ownership verification. Google Analytics measures visits and interactions; it does not establish indexing, rankings or AI citations.
 
+## Enhanced measurement settings
+
+| Setting | Value for this portfolio | Reason |
+| --- | --- | --- |
+| Page views | On | The controller requests a single consented view per document. |
+| Browser-history page changes | Off | Chapter navigation is measured with `section_view`; a chapter is not another page. |
+| Outbound clicks | On if wanted | Generic `click` provides link detail; `project_open` is the controlled project-intent event. Do not sum them as separate leads. |
+| File downloads | On if wanted | Generic `file_download` complements `resume_click`; neither proves a completed download or a job enquiry. |
+| Scrolls | On if wanted | Google's threshold is a rough page-depth measure on this long animated homepage. Chapter events provide more useful detail. |
+| Form interactions | Off | This form prepares a draft; it does not submit a received enquiry to a server. |
+| Site search | Off | This portfolio has no site-search results. |
+| Video engagement | Optional | Google's built-in option targets supported YouTube embeds, rather than these decorative HTML5 recordings. |
+
+These account-side settings have not been read or changed in your Analytics property. Check them there after uploading. Contact details and free-text enquiries are never custom analytics parameters; page URLs sent by this controller exclude query strings and fragments. New consenting chapter visits are counted without consuming views before consent. Clearing the saved choice in another tab revokes measurement. Service-page quote links and supporting-page project links use the same controlled IDs as the homepage.
+
 ## 3. What the events mean
 
 | Event | Meaning | Useful breakdown |
 | --- | --- | --- |
-| `page_view` | A page load, sent by the Google tag | Source, device, country |
+| `page_view` | One page view requested after consent and a successful Google-tag connection | Source, device, country |
 | `section_view` | A chapter was entered while analytics was active | `section` |
 | `project_open` | A project/demo/source link was selected | `project_id` |
 | `project_details` | A project details dialog was opened | `project_id` |
@@ -51,7 +66,6 @@ The measurement ID is configured and the code/consent tests pass. The actual dom
 | `quote_click` | A service email link was selected | `service` |
 | `contact_click` | Another email link was selected | `placement` |
 | `enquiry_draft` | The form prepared an email draft | `placement` |
-| `motion_toggle` | Motion was paused or resumed | `placement`: paused/playing |
 | `web_vital` | An eligible LCP, CLS or INP observation from Google's web-vitals library | `metric_name`, `metric_rating`, `metric_value` |
 
 An email click or draft is an intent signal. The website cannot tell whether the visitor pressed Send in their email app or whether you received the email. Check your inbox for real enquiries. Decorative video autoplay is not counted as a visitor conversion.

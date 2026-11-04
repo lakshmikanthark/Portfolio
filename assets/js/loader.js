@@ -57,7 +57,6 @@
     document.documentElement.classList.add('motion-fallback');document.body.classList.remove('enhanced');
     if(opening)opening.hidden=true;
     document.documentElement.style.overflow='';
-    document.querySelector('#motion-toggle').hidden=true;
   }
   const load=src=>new Promise((resolve,reject)=>{
     const script=document.createElement('script');script.src=src;script.onload=resolve;script.onerror=reject;document.body.append(script);
@@ -95,7 +94,7 @@
     const fonts=document.fonts?.load?Promise.all(['400 16px "DM Sans"','500 80px Teko','400 40px Ruthie'].map(font=>document.fonts.load(font))):Promise.resolve();
     await Promise.all([fonts.then(()=>advance('fonts')),reduced?Promise.resolve():prepareScene()]);
     if(fallback)return;
-    await load('assets/js/motion.js?v=polish-20261104');if(fallback)return;advance('motion');
+    await load('assets/js/motion.js?v=preview-repair-20261104');if(fallback)return;advance('motion');
     await load('assets/js/videos.js');if(fallback)return;advance('previews');
     state.ready=true;state.state='ready';clearTimeout(rescue);syncProgress();
   }

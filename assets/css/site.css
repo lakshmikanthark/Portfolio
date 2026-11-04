@@ -409,3 +409,24 @@ html:not(.js){scroll-behavior:auto}html:not(.js) *,html:not(.js) *::before,html:
 @keyframes loading-glow{from{opacity:.65;transform:scale(.95)}to{opacity:1;transform:scale(1.08)}}
 #chapter-transition{position:fixed;inset:0;z-index:90;background:#000;opacity:0;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.opening::before{animation:none}}
+
+/* Clear preferences, with native pointers above page effects and modal layers. */
+.analytics-choice{bottom:max(20px,env(safe-area-inset-bottom));right:max(16px,env(safe-area-inset-right));width:min(390px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;overflow-wrap:anywhere;padding:22px;background:#100f0d;border-color:#8d7341;border-radius:16px}
+.analytics-choice .analytics-top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:10px;font-size:11px;color:#c9b381}.analytics-choice #analytics-close{border:0;padding:4px;min-height:44px;color:#ddd3c1;flex:none}
+.analytics-choice h2{font:500 22px/1.25 var(--body);margin:0 0 14px}.analytics-choice p{font:400 13px/1.6 var(--body);margin:0 0 14px;color:#d0c8ba}.analytics-choice #analytics-status{padding:12px;border:1px solid #4e422c;border-radius:8px;color:#f0deb5}.analytics-choice .analytics-note{font-size:12px;color:#c9c0ad}
+.analytics-choice .analytics-actions{display:flex;gap:10px;flex-wrap:wrap}.analytics-actions button{flex:1 1 135px;font-size:12px;line-height:1.3;color:#f2e5c9;background:transparent}.analytics-actions button:first-child:not(:disabled){background:#dfbf7d;color:#17120b}.analytics-choice button:disabled{opacity:.55;cursor:not-allowed}.analytics-choice button:focus-visible{outline:2px solid #f5d990;outline-offset:3px}
+@media(hover:hover) and (pointer:fine){.js dialog:not(.menu),.js dialog:not(.menu) *,.js dialog::backdrop,.js .analytics-choice,.js .analytics-choice *{cursor:auto}.js dialog:not(.menu) :is(a,button),.js .analytics-choice button{cursor:pointer}.js .analytics-choice button:disabled{cursor:not-allowed}.js dialog :is(input,textarea){cursor:text}}
+html:has(#opening:not([hidden])):not(.motion-fallback) .analytics-choice{visibility:hidden;pointer-events:none}
+
+/* Requested header typography; retain the existing gold animation and utility sizing. */
+.menu-toggle .menu-label{font-family:var(--script);font-size:clamp(24px,2.2vw,30px);line-height:1.2;text-transform:none}
+.menu-bars i{background:var(--gold-sheen);background-size:300% 100%;animation:gold-flow 12s linear infinite}
+html:not(.js) .utilities{display:flex}
+
+/* Card recordings fill the cover; full walkthroughs keep their natural proportions. */
+.project-image>img,.experiment-panel .preview>img{object-position:50% 0}
+.details-dialog .details-visual{display:block;width:auto;max-width:100%;height:auto;max-height:65svh;margin:25px auto}
+.details-dialog .dialog-top{position:sticky;top:-35px;z-index:2;background:#090908;padding:12px 0}
+.detail-links a,.experiment-links a{min-height:44px;display:inline-flex;align-items:center}
+html.motion-fallback .archive-controls,html:not(.js) .archive-controls{display:none}
+@media(max-width:767px){#immerse-hint[data-section="work"],#immerse-hint[data-section="services"]{bottom:calc(8px + env(safe-area-inset-bottom))}}

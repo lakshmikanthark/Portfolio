@@ -5,7 +5,7 @@ const vm = require('node:vm');
 const { execFileSync } = require('node:child_process');
 
 const directory = path.join(__dirname, '..');
-const prior = 'bcbbdf63b05c514b9bd4d4d2bdcb016e97cebbc5';
+const prior = '022dc1d2d5da55972f93288ea7664c9897bbf53c';
 const compare = process.argv.includes('--compare');
 const read = (file, before = false) => before
   ? execFileSync('git', ['show', `${prior}:${file}`], { cwd: directory, encoding: 'utf8' })
@@ -255,7 +255,7 @@ function motionHarness(before = false) {
   if (oldMesh) {
     assert.deepEqual(newMesh.firstSize, oldMesh.firstSize, 'Render resolution stays unchanged');
     assert.deepEqual(newMesh.resized, oldMesh.resized, 'Orientation resizing stays unchanged');
-    assert.equal(oldMesh.frameQueries, 120);
+    assert.ok(newMesh.frameQueries <= oldMesh.frameQueries, 'The selector repair must not add graphics-limit queries');
   }
   assert.notDeepEqual(newMesh.firstSize, newMesh.resized, 'Orientation changes update the render surface');
   assert.equal(newMesh.frameQueries, 2);

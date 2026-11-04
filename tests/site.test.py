@@ -60,6 +60,8 @@ def floor_fingerprint(text):
 
 
 def preserved_ui(text):
+    # The removed Pause motion handler is an explicitly requested utility change.
+    text = re.sub(r"  \$\('#motion-toggle'\)\.addEventListener\('click',\(\)=>\{\n.*?\n  \}\);\n", '', text, flags=re.S)
     start = text.index('  // All resume links')
     end = text.index('\n  const pointer=', start)
     text = text[:start] + '[ENQUIRY]\n' + text[end:]
@@ -70,6 +72,10 @@ def preserved_ui(text):
 
 
 def preserved_motion(text):
+    # Direct service/project selectors are an authorized interaction repair.
+    start = text.index('  function step(')
+    end = text.index('  function artStep(', start)
+    text = text[:start] + '[CARD_SELECTION]\n' + text[end:]
     text = text.replace(",embers=$('embers'),ec=embers?.getContext('2d')", '')
     resize = "    if(embers&&ec){const d=Math.min(devicePixelRatio||1,1.5);embers.width=Math.round(w*d);embers.height=Math.round(h*d);ec.setTransform(d,0,0,d,0,0);}\n"
     text = text.replace(resize, '')
@@ -168,10 +174,15 @@ class Site(unittest.TestCase):
             with self.subTest(url=url):
                 settings = [a for a, _ in doc.scripts if 'settings.js' in a.get('src', '')]
                 self.assertEqual(len(settings), 1)
-                self.assertEqual(settings[0]['src'], '/assets/js/settings.js?v=ga4-20261104')
+                self.assertEqual(settings[0]['src'], '/assets/js/settings.js?v=search-audit-20261104')
                 attrs = {a['id']: a for _, a in doc.tags if 'id' in a}
                 self.assertIn('hidden', attrs['analytics-choice'])
                 self.assertIn('hidden', attrs['analytics-preferences'])
+                self.assertEqual(attrs['analytics-choice']['role'], 'dialog')
+                self.assertEqual(attrs['analytics-choice']['aria-modal'], 'false')
+                self.assertEqual(attrs['analytics-choice']['aria-labelledby'], 'analytics-title')
+                for element_id in ('analytics-title', 'analytics-summary', 'analytics-status', 'analytics-help', 'analytics-close'):
+                    self.assertIn(element_id, attrs)
                 csp = next(a['content'] for t, a in doc.tags if t == 'meta' and a.get('http-equiv') == 'Content-Security-Policy')
                 self.assertIn('https://www.googletagmanager.com', csp)
                 self.assertIn('https://*.google-analytics.com', csp)
@@ -193,7 +204,12 @@ class Site(unittest.TestCase):
     def test_original_animation_and_media_are_preserved(self):
         for rel, expected in self.baseline['files'].items():
             with self.subTest(file=rel):
-                self.assertEqual(hashlib.sha256((ROOT / rel).read_bytes()).hexdigest(), expected)
+                content = (ROOT / rel).read_bytes()
+                if rel == 'assets/css/site.css':
+                    # Only the appended preferences/pointer styles are authorized here.
+                    # Keep the complete original animation stylesheet fingerprint intact.
+                    content = content.split(b'\n/* Clear preferences, with native pointers', 1)[0]
+                self.assertEqual(hashlib.sha256(content).hexdigest(), expected)
         ui = preserved_ui((ROOT / 'assets/js/ui.js').read_text())
         self.assertEqual(hashlib.sha256(ui.encode()).hexdigest(), self.baseline['ui_outside_enquiry'])
         motion = preserved_motion((ROOT / 'assets/js/motion.js').read_text())

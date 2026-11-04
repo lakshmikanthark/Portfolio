@@ -442,10 +442,6 @@
     el.addEventListener('pointermove',e=>{if(!pointer.matches||reduced.matches||el.classList.contains('glow-button'))return;const r=el.getBoundingClientRect();el.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.08}px,${(e.clientY-r.top-r.height/2)*.12}px)`;});
     el.addEventListener('pointerleave',()=>el.style.transform='');
   });
-  $('#motion-toggle').addEventListener('click',()=>{
-    const paused=window.LKMotion?.togglePause()??false;
-    $('#motion-toggle').setAttribute('aria-pressed',String(paused));$('#motion-toggle').textContent=paused?'Resume motion':'Pause motion';
-  });
   reduced.addEventListener('change',()=>{document.body.classList.toggle('enhanced',!reduced.matches);root.classList.toggle('motion-reduced',reduced.matches);});
   window.LKUI={toast,prepareGlow};
 })();
